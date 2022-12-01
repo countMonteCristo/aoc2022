@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"sort"
 	"strconv"
 
@@ -30,6 +31,9 @@ func part_1(calories []int) {
 			ans = q
 		}
 	}
+	if ans != 72070 {
+		log.Fatal("Wrong answer at part 1: ", ans, " (correct: 72070)")
+	}
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
@@ -37,7 +41,11 @@ func part_2(calories []int) {
 	sort.Slice(calories, func(i, j int) bool {
 		return calories[i] > calories[j]
 	})
-	fmt.Println("[Part 2] Answer:", calories[0]+calories[1]+calories[2])
+	ans := calories[0] + calories[1] + calories[2]
+	if ans != 211805 {
+		log.Fatal("Wrong answer at part 2: ", ans, " (correct: 211805)")
+	}
+	fmt.Println("[Part 2] Answer:", ans)
 }
 
 func main() {
