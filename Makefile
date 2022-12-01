@@ -2,9 +2,6 @@ $(V).SILENT:
 
 GO=go
 
-SOURCES := $(wildcard days/day*)
-TARGETS := $(basename ${SOURCES})
-
 .PHONY: clean all
 
 all:
