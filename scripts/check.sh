@@ -19,8 +19,10 @@ for f in days/day[0-2][0-9]/main.go; do
     day=$(echo "${f}" | grep -oP '\d\d')
     [ "$verbose" == "1" ] && echo -e "${CVERB}Check Day${day}:${NC}"
 
-    output=$(go run "${f}")
+	run_target="run_${target}"
+    output=$(make -B "${run_target}")
     result="$?"
     [ "$verbose" == "1" ] && echo "${output}"
-    [ "${result}" != "0" ] && echo -e "${CFAIL}Day${day} failed!${NC}\n" || echo -e "${COK}Day${day} succeded!${NC}\n"
+    [ "${result}" != "0" ] && echo -e "${CFAIL}Day${day} failed!${NC}" || echo -e "${COK}Day${day} succeded!${NC}"
+	[ "$verbose" == "1" ] && echo ""
 done;
