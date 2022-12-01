@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sort"
-	"strconv"
+	"log"
 
 	"aoc2022/utils"
 )
