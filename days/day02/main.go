@@ -11,13 +11,13 @@ import (
 type ScoreType = map[string]int
 type StrategyType = map[string]string
 
-var score = map[string]ScoreType {
-	"A": {"X": 3+1, "Y": 6+2, "Z": 0+3},
-	"B": {"X": 0+1, "Y": 3+2, "Z": 6+3},
-	"C": {"X": 6+1, "Y": 0+2, "Z": 3+3},
+var score = map[string]ScoreType{
+	"A": {"X": 3 + 1, "Y": 6 + 2, "Z": 0 + 3},
+	"B": {"X": 0 + 1, "Y": 3 + 2, "Z": 6 + 3},
+	"C": {"X": 6 + 1, "Y": 0 + 2, "Z": 3 + 3},
 }
 
-var rule = map[string]StrategyType {
+var rule = map[string]StrategyType{
 	"A": {"X": "Z", "Y": "X", "Z": "Y"},
 	"B": {"X": "X", "Y": "Y", "Z": "Z"},
 	"C": {"X": "Y", "Y": "Z", "Z": "X"},
