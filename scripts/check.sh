@@ -1,5 +1,8 @@
 #! /bin/bash
 
+#set -x
+set -e
+
 CFAIL='\033[0;31m'    # red for fail
 COK='\033[0;32m'  # green for success
 CVERB='\033[0;35m'  # magenta for verbose text
@@ -24,5 +27,5 @@ for f in days/day[0-2][0-9]/main.go; do
     result="$?"
     [ "$verbose" == "1" ] && echo "${output}"
     [ "${result}" != "0" ] && echo -e "${CFAIL}Day${day} failed!${NC}" || echo -e "${COK}Day${day} succeded!${NC}"
-	[ "$verbose" == "1" ] && echo ""
-done;
+	[ "$verbose" == "1" ] && echo "" || :
+done
