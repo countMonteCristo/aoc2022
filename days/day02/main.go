@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"aoc2022/utils"
@@ -39,9 +38,7 @@ func part_1(input []string) {
 			return score[round[0]][you]
 		},
 	)
-	if ans != 15422 {
-		log.Fatal("Wrong answer at part 1: ", ans, " (correct: 15422)")
-	}
+	utils.CheckTask(1, ans, 15422)
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
@@ -53,9 +50,7 @@ func part_2(input []string) {
 			return score[round[0]][you]
 		},
 	)
-	if ans != 15442 {
-		log.Fatal("Wrong answer at part 2: ", ans, " (correct: 15442)")
-	}
+	utils.CheckTask(2, ans, 15442)
 	fmt.Println("[Part 2] Answer:", ans)
 }
 

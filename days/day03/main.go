@@ -66,17 +66,13 @@ func process_2(lines []string, ngroups int) (total int) {
 
 func part_1(data []string) {
 	ans := process_1(data)
-	if ans != 8233 {
-		log.Fatal("Wrong answer at part 1: ", ans, " (correct: 8233)")
-	}
+	utils.CheckTask(1, ans, 8233)
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
 func part_2(data []string) {
 	ans := process_2(data, 3)
-	if ans != 2821 {
-		log.Fatal("Wrong answer at part 2: ", ans, " (correct: 2821)")
-	}
+	utils.CheckTask(2, ans, 2821)
 	fmt.Println("[Part 2] Answer:", ans)
 }
 
