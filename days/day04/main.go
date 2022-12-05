@@ -46,9 +46,9 @@ func prepare(lines []string) (pairs []Pair) {
 	return
 }
 
-func countIf(pairs []Pair, f func(*Pair) bool) (ans int) {
+func countIf(pairs []Pair, predicate func(*Pair) bool) (ans int) {
 	for _, pair := range pairs {
-		if f(&pair) {
+		if predicate(&pair) {
 			ans += 1
 		}
 	}

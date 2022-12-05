@@ -6,12 +6,14 @@ import (
 	"os"
 )
 
-func CheckTask(part_id int, ans, correct_ans int) {
+// Check task `part_id` answer for correctness, aborting if `ans`` does not equal to `correct_ans``
+func CheckTask[AnsType int|string](part_id int, ans, correct_ans AnsType) {
 	if ans != correct_ans {
 		log.Fatal("Wrong answer at part_", part_id, ": ", ans, " (correct: ", correct_ans, ")")
 	}
 }
 
+// Returns array of lines from file name `fn`
 func ReadFile(fn string) (lines []string) {
 	file, err := os.Open(fn)
 

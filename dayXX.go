@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	_ "log"
 
 	"aoc2022/utils"
 )
@@ -16,9 +15,6 @@ func part_1(input []int) {
 	// solve here
 
 	utils.CheckTask(1, ans, 0)
-	//if ans != 0 {
-	//	log.Fatal("Wrong answer at part 1: ", ans, " (correct: <UNKNOWN>)")
-	//}
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
@@ -27,9 +23,6 @@ func part_2(input []int) {
 	// solve here
 
 	utils.CheckTask(2, ans, 0)
-	//if ans != 0 {
-	//	log.Fatal("Wrong answer at part 2: ", ans, " (correct: <UNKNOWN>)")
-	//}
 	fmt.Println("[Part 2] Answer:", ans)
 }
 
