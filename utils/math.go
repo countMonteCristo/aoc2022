@@ -37,3 +37,19 @@ func MaxSlice[T constraints.Ordered](args []T) T {
 	}
 	return max
 }
+
+// Segment AB on X-axis where x(A) = Begin, x(B) = End
+// It's assumed that Begin <= End
+type Segmnet struct {
+	Begin, End int
+}
+
+// Check if segment r2 is fully inside segment r1
+func (r1 *Segmnet) Contains(r2 *Segmnet) bool {
+	return r1.Begin <= r2.Begin && r1.End >= r2.End
+}
+
+// Check if r1 and r2 have any common part
+func (r1 *Segmnet) Intersects(r2 *Segmnet) bool {
+	return r1.End >= r2.Begin && r2.End >= r1.Begin
+}
