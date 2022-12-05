@@ -8,57 +8,35 @@ import (
 	"aoc2022/utils"
 )
 
-type Stack struct {
-	data []string
-}
-
-func (s *Stack) Push(e string) {
-	s.data = append(s.data, e)
-}
-
-func (s *Stack) Pop() string {
-	if len(s.data) == 0 {
-		panic("Pop from empty stack")
-	}
-	top := s.data[len(s.data)-1]
-	s.data = s.data[:len(s.data)-1]
-	return top
-}
-
-func (s *Stack) Top() string {
-	return s.data[len(s.data)-1]
-}
-
 type Command struct {
 	count, from, to int
 }
 
-func (c *Command) apply(stacks []Stack) {
-	for n := 0; n < c.count; n++ {
-		item := stacks[c.from].Pop()
-		stacks[c.to].Push(item)
+func (c *Command) apply(stacks []utils.Stack, is9001 bool) {
+	items := stacks[c.from].PopN(c.count)
+	if is9001 {
+		stacks[c.to].PushN(items)
+	} else {
+		for i := 0; i < len(items); i++ {
+			stacks[c.to].Push(items[len(items)-1-i])
+		}
 	}
 }
 
-func (c *Command) apply2(stacks []Stack) {
-	ts := Stack{}
-	for n := 0; n < c.count; n++ {
-		item := stacks[c.from].Pop()
-		ts.Push(item)
-	}
-	for n := 0; n < c.count; n++ {
-		stacks[c.to].Push(ts.Pop())
+func apply(commands []Command, stacks []utils.Stack, is9001 bool) {
+	for _, cmd := range commands {
+		cmd.apply(stacks, is9001)
 	}
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
+func getTop(stacks []utils.Stack) (top string) {
+	for _, s := range stacks {
+		top += s.Top().(string)
 	}
-	return b
+	return
 }
 
-func prepare(lines []string) ([]Stack, []Command) {
+func prepare(lines []string) ([]utils.Stack, []Command) {
 	i_empty := 0
 	for i, line := range lines {
 		if len(line) == 0 {
@@ -69,9 +47,9 @@ func prepare(lines []string) ([]Stack, []Command) {
 	ids_str := strings.Trim(lines[i_empty-1], " ")
 	ids := strings.Split(ids_str, "   ")
 
-	stacks := make([]Stack, len(ids))
+	stacks := make([]utils.Stack, len(ids))
 	for j := i_empty - 2; j >= 0; j-- {
-		for c := 0; c < min(len(ids), (len(lines[j])+1)/4); c += 1 {
+		for c := 0; c < utils.Min(len(ids), (len(lines[j])+1)/4); c += 1 {
 			col := lines[j][4*c+1]
 			if col != ' ' {
 				stacks[c].Push(string(col))
@@ -92,33 +70,21 @@ func prepare(lines []string) ([]Stack, []Command) {
 	return stacks, commands
 }
 
-func part_1(lines []string) {
+func solve(lines []string, is9001 bool) string {
 	stacks, commands := prepare(lines)
-	ans := ""
+	apply(commands, stacks, is9001)
+	return getTop(stacks)
+}
 
-	for _, cmd := range commands {
-		cmd.apply(stacks)
-	}
-
-	for _, s := range stacks {
-		ans += s.Top()
-	}
+func part_1(lines []string) {
+	ans := solve(lines, false)
 
 	utils.CheckTask(1, ans, "SHQWSRBDL")
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
 func part_2(lines []string) {
-	stacks, commands := prepare(lines)
-	ans := ""
-
-	for _, cmd := range commands {
-		cmd.apply2(stacks)
-	}
-
-	for _, s := range stacks {
-		ans += s.Top()
-	}
+	ans := solve(lines, true)
 
 	utils.CheckTask(2, ans, "CDTQZHBRS")
 	fmt.Println("[Part 2] Answer:", ans)

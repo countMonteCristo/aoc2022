@@ -12,6 +12,7 @@ func prepare(lines []string) (data []int) {
 
 func part_1(input []int) {
 	ans := 0
+
 	// solve here
 
 	utils.CheckTask(1, ans, 0)
@@ -20,6 +21,7 @@ func part_1(input []int) {
 
 func part_2(input []int) {
 	ans := 0
+
 	// solve here
 
 	utils.CheckTask(2, ans, 0)

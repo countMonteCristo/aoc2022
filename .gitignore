@@ -16,3 +16,4 @@
 # vendor/
 
 bin/day[0-2][0-9]
+t.go
