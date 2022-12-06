@@ -6,25 +6,26 @@ import (
 	"aoc2022/utils"
 )
 
-func prepare(lines []string) (data []int) {
+type DataType []int
+
+func prepare(lines []string) (data DataType) {
 	return
 }
 
-func part_1(input []int) {
-	ans := 0
-
+func solve(data DataType /*args...*/) (ans int) {
 	// solve here
+	return
+}
 
-	utils.CheckTask(1, ans, 0)
+func part_1(data DataType) {
+	ans := solve(data)
+	// utils.CheckTask(1, ans, 0)
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
-func part_2(input []int) {
-	ans := 0
-
-	// solve here
-
-	utils.CheckTask(2, ans, 0)
+func part_2(data DataType) {
+	ans := solve(data)
+	// utils.CheckTask(2, ans, 0)
 	fmt.Println("[Part 2] Answer:", ans)
 }
 

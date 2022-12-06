@@ -78,14 +78,12 @@ func solve(lines []string, is9001 bool) string {
 
 func part_1(lines []string) {
 	ans := solve(lines, false)
-
 	utils.CheckTask(1, ans, "SHQWSRBDL")
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
 func part_2(lines []string) {
 	ans := solve(lines, true)
-
 	utils.CheckTask(2, ans, "CDTQZHBRS")
 	fmt.Println("[Part 2] Answer:", ans)
 }
