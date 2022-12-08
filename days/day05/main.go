@@ -12,7 +12,9 @@ type Command struct {
 	count, from, to int
 }
 
-func (c *Command) apply(stacks []utils.Stack, is9001 bool) {
+type StrStack = utils.Stack[string]
+
+func (c *Command) apply(stacks []StrStack, is9001 bool) {
 	items := stacks[c.from].PopN(c.count)
 	if is9001 {
 		stacks[c.to].PushN(items)
@@ -23,20 +25,20 @@ func (c *Command) apply(stacks []utils.Stack, is9001 bool) {
 	}
 }
 
-func apply(commands []Command, stacks []utils.Stack, is9001 bool) {
+func apply(commands []Command, stacks []StrStack, is9001 bool) {
 	for _, cmd := range commands {
 		cmd.apply(stacks, is9001)
 	}
 }
 
-func getTop(stacks []utils.Stack) (top string) {
+func getTop(stacks []StrStack) (top string) {
 	for _, s := range stacks {
-		top += s.Top().(string)
+		top += s.Top()
 	}
 	return
 }
 
-func prepare(lines []string) ([]utils.Stack, []Command) {
+func prepare(lines []string) ([]StrStack, []Command) {
 	i_empty := 0
 	for i, line := range lines {
 		if len(line) == 0 {
@@ -47,7 +49,7 @@ func prepare(lines []string) ([]utils.Stack, []Command) {
 	ids_str := strings.Trim(lines[i_empty-1], " ")
 	ids := strings.Split(ids_str, "   ")
 
-	stacks := make([]utils.Stack, len(ids))
+	stacks := make([]StrStack, len(ids))
 	for j := i_empty - 2; j >= 0; j-- {
 		for c := 0; c < utils.Min(len(ids), (len(lines[j])+1)/4); c += 1 {
 			col := lines[j][4*c+1]

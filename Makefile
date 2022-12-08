@@ -54,3 +54,9 @@ day07: days/day07/main.go
 
 run_day07: day07
 	./bin/day07
+
+day08: days/day08/main.go
+	${GO} build -o bin/$@ days/day08/main.go
+
+run_day08: day08
+	./bin/day08

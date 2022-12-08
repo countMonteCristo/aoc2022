@@ -1,26 +1,26 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 )
 
 // Simple Stack implementation based on slice
-type Stack struct {
-	data []interface{}
+type Stack[T any] struct {
+	data []T
 }
 
-func (s *Stack) Push(e interface{}) {
+func (s *Stack[T]) Push(e T) {
 	s.data = append(s.data, e)
 }
 
 // Pushes all elements from array `elems` to stack:
 // [1, 2, 3].PushN([4, 5]) -> [1, 2, 3, 4, 5]
-func (s *Stack) PushN(elems []interface{}) {
+func (s *Stack[T]) PushN(elems []T) {
 	s.data = append(s.data, elems...)
 }
 
 // Return and remove top element from the stack
-func (s *Stack) Pop() interface{} {
+func (s *Stack[T]) Pop() T {
 	if len(s.data) == 0 {
 		panic("Pop from empty stack")
 	}
@@ -31,9 +31,10 @@ func (s *Stack) Pop() interface{} {
 
 // Return and remove top N elements from the stack
 // [1, 2, 3, 4, 5].PopN(2) -> [4, 5], stack=[1, 2, 3]
-func (s *Stack) PopN(count int) []interface{} {
+func (s *Stack[T]) PopN(count int) []T {
 	if len(s.data) < count {
-		log.Fatal("Not enough elemnts in stack to pop: have ", len(s.data), ", need ", count)
+		msg := fmt.Sprintf("Not enough elemnts in stack to pop: have %d, need %d", len(s.data), count)
+		panic(msg)
 	}
 	top := s.data[len(s.data)-count:]
 	s.data = s.data[:len(s.data)-count]
@@ -41,7 +42,7 @@ func (s *Stack) PopN(count int) []interface{} {
 }
 
 // Return (but not remove!) top element from the stack
-func (s *Stack) Top() interface{} {
+func (s *Stack[T]) Top() T {
 	if len(s.data) == 0 {
 		panic("Top from empty stack")
 	}

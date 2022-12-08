@@ -37,3 +37,12 @@ make clean
 ```console
 ./scripts/check.sh
 ```
+### Tests
+There is custum **aoc2022/utils** package which contains widely used structures and functions. There are also tests for this package. You can run them:
+```console
+go test -v aoc2022/utils -coverprofile=utils_cover.out
+```
+Show coverage statistics in browser:
+```console
+go tool cover -html=utils_cover.out
+```

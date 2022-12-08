@@ -4,6 +4,17 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
+type Number interface {
+	int8 | int16 | int32 | int64 | int | float32 | float64
+}
+
+func Abs[T Number](x T) T {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
 func Min[T constraints.Ordered](args ...T) T {
 	return MinSlice(args)
 }
@@ -40,16 +51,20 @@ func MaxSlice[T constraints.Ordered](args []T) T {
 
 // Segment AB on X-axis where x(A) = Begin, x(B) = End
 // It's assumed that Begin <= End
-type Segmnet struct {
+type Segment struct {
 	Begin, End int
 }
 
-// Check if segment r2 is fully inside segment r1
-func (r1 *Segmnet) Contains(r2 *Segmnet) bool {
-	return r1.Begin <= r2.Begin && r1.End >= r2.End
+// Check if segment s2 is fully inside segment s1
+func (s1 *Segment) Contains(s2 *Segment) bool {
+	return s1.Begin <= s2.Begin && s1.End >= s2.End
 }
 
-// Check if r1 and r2 have any common part
-func (r1 *Segmnet) Intersects(r2 *Segmnet) bool {
-	return r1.End >= r2.Begin && r2.End >= r1.Begin
+// Check if s1 and s2 have any common part
+func (s1 *Segment) Intersects(s2 *Segment) bool {
+	return s1.End >= s2.Begin && s2.End >= s1.Begin
+}
+
+type Pair[T any] struct {
+	First, Second T
 }
