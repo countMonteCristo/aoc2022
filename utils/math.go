@@ -15,6 +15,15 @@ func Abs[T Number](x T) T {
 	return x
 }
 
+func Sign[T Number](x T) int {
+	if x < 0 {
+		return -1
+	} else if x > 0 {
+		return 1
+	}
+	return 0
+}
+
 func Min[T constraints.Ordered](args ...T) T {
 	return MinSlice(args)
 }
@@ -67,4 +76,45 @@ func (s1 *Segment) Intersects(s2 *Segment) bool {
 
 type Pair[T any] struct {
 	First, Second T
+}
+
+
+type Pos[T Number] struct {
+	X, Y T
+}
+
+func (p *Pos[T]) Add(q *Pos[T]) {
+	p.Y += q.Y
+	p.X += q.X
+}
+
+func (p *Pos[T]) Plus(q *Pos[T]) Pos[T] {
+	return Pos[T]{
+		X: p.X + q.X,
+		Y: p.Y + q.Y,
+	}
+}
+
+func (p *Pos[T]) Sub(q *Pos[T]) {
+	p.Y -= q.Y
+	p.X -= q.X
+}
+
+func (p *Pos[T]) Minus(q *Pos[T]) Pos[T] {
+	return Pos[T]{
+		X: p.X - q.X,
+		Y: p.Y - q.Y,
+	}
+}
+
+func (p *Pos[T]) Mul(k T) {
+	p.Y *= k
+	p.X *= k
+}
+
+func (p *Pos[T]) Prod(k T) Pos[T] {
+	return Pos[T]{
+		X: k*p.X,
+		Y: k*p.Y,
+	}
 }

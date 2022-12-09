@@ -1,6 +1,5 @@
 package utils
 
-
 // Identity function
 func Id[T any](x T) T {
 	return x
@@ -17,8 +16,8 @@ func False[T any](x T) bool {
 }
 
 // Create func(*T)V from func(T)V
-func Deref[T, V any](f func(T) V) func(*T)V {
-	return func(x *T)V{
+func Deref[T, V any](f func(T) V) func(*T) V {
+	return func(x *T) V {
 		return f(*x)
 	}
 }
@@ -49,7 +48,7 @@ func SumIf[T Number](items []T, pred func(T) bool) (count T) {
 	return SumIfP(items, Deref(pred))
 }
 
-func SumValueP[T any, V Number](items []T, f func(*T) V) (V) {
+func SumValueP[T any, V Number](items []T, f func(*T) V) V {
 	return Sum(TransformP(items, f))
 }
 
@@ -71,4 +70,10 @@ func TransformP[T, V any](items []T, f func(*T) V) []V {
 
 func Transform[T, V any](items []T, f func(T) V) []V {
 	return TransformP(items, Deref(f))
+}
+
+func UpdateMap[T comparable, V any](first, second map[T]V) {
+	for key, value := range second {
+		first[key] = value
+	}
 }
