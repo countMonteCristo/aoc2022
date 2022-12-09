@@ -58,3 +58,26 @@ func TestPreds(t *testing.T) {
 	assert.Equal(t, false, utils.False(5))
 	assert.Equal(t, false, utils.False("hello"))
 }
+
+func TestUpdateMap(t *testing.T) {
+	m1 := map[string]int{
+		"a": 1, "b": 2, "c": 3,
+	}
+	m2 := map[string]int{
+		"b":2, "c":4, "d": 5,
+	}
+
+	utils.UpdateMap(m1, m2)
+	xa, exists := m1["a"]
+	assert.True(t, exists)
+	assert.Equal(t, xa, 1)
+	xb, exists := m1["b"]
+	assert.True(t, exists)
+	assert.Equal(t, xb, 2)
+	xc, exists := m1["c"]
+	assert.True(t, exists)
+	assert.Equal(t, xc, 4)
+	xd, exists := m1["d"]
+	assert.True(t, exists)
+	assert.Equal(t, xd, 5)
+}
