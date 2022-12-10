@@ -74,13 +74,13 @@ func solve_2(data DataType) string {
 
 func part_1(data DataType) {
 	ans := solve_1(data)
-	// utils.CheckTask(1, ans, 13860)
+	utils.CheckTask(1, ans, 13860)
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
 func part_2(data DataType) {
 	ans := solve_2(data)
-	// utils.CheckTask(2, ans, "RZHFGJCB")
+	utils.CheckTask(2, ans, "RZHFGJCB")
 	fmt.Println("[Part 2] Answer:", ans)
 }
 
