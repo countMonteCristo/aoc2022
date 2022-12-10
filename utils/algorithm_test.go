@@ -48,6 +48,17 @@ func TestTransform(t *testing.T) {
 	assert.EqualValues(t, resp_got, res_got, "TransformP test failed")
 }
 
+func TestFilter(t *testing.T) {
+	data := []int{1, 2, 3, 4, 5, 6, 7}
+	even := []int{2, 4, 6}
+
+	res_got := utils.Filter(data, func(x int) bool { return x%2 == 0})
+	assert.EqualValues(t, even, res_got)
+
+	resp_got := utils.FilterP(data, func(x *int) bool { return *x%2 == 0})
+	assert.EqualValues(t, even, resp_got)
+}
+
 func TestPreds(t *testing.T) {
 	assert.Equal(t, 5, utils.Id(5))
 	assert.Equal(t, "hello", utils.Id("hello"))

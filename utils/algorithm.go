@@ -72,6 +72,20 @@ func Transform[T, V any](items []T, f func(T) V) []V {
 	return TransformP(items, Deref(f))
 }
 
+func FilterP[T any](items []T, pred func(*T) bool) []T {
+	res := make([]T, 0)
+	for _, item := range items {
+		if pred(&item) {
+			res = append(res, item)
+		}
+	}
+	return res
+}
+
+func Filter[T any](items []T, pred func(T) bool) []T {
+	return FilterP(items, Deref(pred))
+}
+
 func UpdateMap[T comparable, V any](first, second map[T]V) {
 	for key, value := range second {
 		first[key] = value

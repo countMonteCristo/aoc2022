@@ -4,6 +4,7 @@
 ## Requirements
 * go >= 1.19
 * golang.org/x/exp
+* github.com/stretchr/testify/assert
 
 ## Commands
 ### Make commands
