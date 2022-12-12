@@ -13,12 +13,12 @@ type Fruit struct {
 	priority int
 }
 
-func (i *Fruit) LessThan(j utils.PQItem) bool {
-	return i.priority < j.(*Fruit).priority
+func (i Fruit) LessThan(j utils.PQItem) bool {
+	return i.priority < j.(Fruit).priority
 }
 
 func TestPriorityQueue(t *testing.T) {
-	pq := utils.NewPq[*Fruit]()
+	pq := utils.NewPq[Fruit]()
 	assert.True(t, pq.Empty())
 
 	items := map[string]int{

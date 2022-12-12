@@ -14,12 +14,12 @@ import "container/heap"
 //			name     string
 //			priority int
 //		}
-//		func (i *Fruit) LessThan(j utils.PQItem) bool {
-//			return i.priority < j.(*Fruit).priority
+//		func (i Fruit) LessThan(j utils.PQItem) bool {
+//			return i.priority < j.(Fruit).priority
 //		}
 //
 // 2. Create priority queue:
-//		pq := utils.NewPriorityQueue[*Fruit]()
+//		pq := utils.NewPriorityQueue[Fruit]()
 //
 // 3. Push new item:
 //		pq.Push(&Fruit{name: "apple", priority: 3})
@@ -47,12 +47,12 @@ func NewPq[T PQItem]() *PQ[T] {
 	return pq
 }
 
-func (pq *PQ[T]) Push(item T) {
+func (pq *PQ[T]) Push(item *T) {
 	heap.Push(&pq.data, item)
 }
 
-func (pq *PQ[T]) Pop() T {
-	return heap.Pop(&pq.data).(T)
+func (pq *PQ[T]) Pop() *T {
+	return heap.Pop(&pq.data).(*T)
 }
 
 func (pq *PQ[T]) Empty() bool {
@@ -63,7 +63,7 @@ func (pq *PQ[T]) Empty() bool {
 
 // An heap_item is something we manage in a priority queue.
 type heap_item[T PQItem] struct {
-	value T   // user data
+	value *T  // user data
 	index int // index of the item in the heap
 }
 
@@ -76,7 +76,7 @@ func (pq heap_items[T]) Len() int {
 func (pq heap_items[T]) Less(i, j int) bool {
 	v1 := pq[i].value
 	v2 := pq[j].value
-	return v1.LessThan(v2)
+	return (*v1).LessThan(*v2)
 }
 
 func (pq heap_items[T]) Swap(i, j int) {
@@ -87,7 +87,7 @@ func (pq heap_items[T]) Swap(i, j int) {
 
 func (pq *heap_items[T]) Push(x any) {
 	n := len(*pq)
-	value := x.(T)
+	value := x.(*T)
 	item := &heap_item[T]{value: value, index: n}
 	*pq = append(*pq, item)
 }

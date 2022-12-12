@@ -72,8 +72,8 @@ type Path struct {
 	heuristic int      // minimum distance to the destination point
 }
 
-func (p *Path) LessThan(j utils.PQItem) bool {
-	q := j.(*Path)
+func (p Path) LessThan(j utils.PQItem) bool {
+	q := j.(Path)
 	return len(p.points)+p.heuristic < len(q.points)+q.heuristic
 }
 
@@ -81,7 +81,7 @@ func (p *Path) LessThan(j utils.PQItem) bool {
 func astar(field *Field, S, E IntPos) int {
 	visited := utils.NewSet[IntPos]()
 
-	queue := utils.NewPq[*Path]()
+	queue := utils.NewPq[Path]()
 	queue.Push(&Path{
 		points: []IntPos{S}, heuristic: utils.Manhattan(S, E),
 	})
