@@ -19,10 +19,9 @@ var Funcs = map[string]Binary{
 
 func parseArg(a string) (int, bool) {
 	arg := 0
-	is_old := true
-	if a != "old" {
+	is_old := (a == "old")
+	if !is_old {
 		arg, _ = strconv.Atoi(a)
-		is_old = false
 	}
 	return arg, is_old
 }
@@ -115,9 +114,9 @@ func solve(monkeys Monkeys, N int, f Unary) int {
 	for i := 0; i < N; i++ {
 		for _, m := range monkeys {
 			for _, item := range m.Items {
-				worry := f(m.Operation(item))
-				next_m_id := m.ThrowTo(worry)
-				monkeys[next_m_id].Items = append(monkeys[next_m_id].Items, worry)
+				value := f(m.Operation(item))
+				next_m_id := m.ThrowTo(value)
+				monkeys[next_m_id].Items = append(monkeys[next_m_id].Items, value)
 			}
 			m.Inspected += len(m.Items)
 			m.Items = make([]int, 0)

@@ -118,3 +118,7 @@ func (p *Pos[T]) Prod(k T) Pos[T] {
 		Y: k*p.Y,
 	}
 }
+
+func Manhattan[T Number](p, q Pos[T]) T {
+	return Abs(p.X - q.X) + Abs(p.Y - q.Y)
+}
