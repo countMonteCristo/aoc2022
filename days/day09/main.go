@@ -9,7 +9,6 @@ import (
 )
 
 type IntPos = utils.Pos[int]
-type VisitedMap = map[IntPos]bool
 
 type Rope struct {
 	Body []IntPos
@@ -33,10 +32,10 @@ func (r *Rope) Len() int {
 	return len(r.Body)
 }
 
-func (r *Rope) apply(cmd *Cmd) VisitedMap {
+func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPos] {
 	dp := cmd.GetDirection()
 
-	visited := make(VisitedMap)
+	visited := utils.NewSet[IntPos]()
 	for i := 0; i < cmd.Count; i++ {
 		r.Head().Add(&dp)
 
@@ -54,7 +53,7 @@ func (r *Rope) apply(cmd *Cmd) VisitedMap {
 			r.Body[j].Add(&dq)
 		}
 
-		visited[*r.Tail()] = true
+		visited.Add(*r.Tail())
 	}
 	return visited
 }
@@ -112,13 +111,13 @@ func prepare(lines []string) (data DataType) {
 
 func solve(data DataType, rope_len int) int {
 	r := NewRope(rope_len)
-	visited := make(VisitedMap)
-	visited[*r.Tail()] = true
+	visited := utils.NewSet[IntPos]()
+	visited.Add(*r.Tail())
 
 	for _, cmd := range data {
-		utils.UpdateMap(visited, r.apply(&cmd))
+		visited.Update(r.apply(&cmd))
 	}
-	return len(visited)
+	return visited.Len()
 }
 
 func part_1(data DataType) {

@@ -86,3 +86,14 @@ func TestPosMethods(t *testing.T) {
 	p1.Mul(3)
 	assert.Equal(t, utils.Pos[int]{3, 6}, p1)
 }
+
+func TestManhattan(t *testing.T) {
+	p1 := utils.Pos[int]{
+		X: 1, Y: 1,
+	}
+	p2 := utils.Pos[int]{
+		X: 4, Y: 6,
+	}
+
+	assert.Equal(t, 8, utils.Manhattan(p1, p2))
+}

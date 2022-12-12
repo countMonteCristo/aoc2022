@@ -1,53 +1,10 @@
 package main
 
 import (
-	"container/heap"
 	"fmt"
 
 	"aoc2022/utils"
 )
-
-//
-// PriorityQueue has been stolen from https://pkg.go.dev/container/heap
-//
-
-// An Item is something we manage in a priority queue.
-type Item struct {
-	path     []IntPos // The value of the item; arbitrary.
-	priority int      // The priority of the item in the queue.
-	index    int      // The index of the item in the heap.
-}
-
-type PriorityQueue []*Item
-
-func (pq PriorityQueue) Len() int { return len(pq) }
-
-func (pq PriorityQueue) Less(i, j int) bool {
-	return pq[i].priority+len(pq[i].path) < pq[j].priority+len(pq[j].path)
-}
-
-func (pq PriorityQueue) Swap(i, j int) {
-	pq[i], pq[j] = pq[j], pq[i]
-	pq[i].index = i
-	pq[j].index = j
-}
-
-func (pq *PriorityQueue) Push(x any) {
-	n := len(*pq)
-	item := x.(*Item)
-	item.index = n
-	*pq = append(*pq, item)
-}
-
-func (pq *PriorityQueue) Pop() any {
-	old := *pq
-	n := len(old)
-	item := old[n-1]
-	old[n-1] = nil  // avoid memory leak
-	item.index = -1 // for safety
-	*pq = old[0 : n-1]
-	return item
-}
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -96,7 +53,7 @@ func (f *Field) contains(p IntPos) bool {
 }
 
 func nbrs(p IntPos, field *Field) []IntPos {
-	neighbours := make([]IntPos, 0, 4)
+	neighbours := make([]IntPos, 0, len(D))
 	e := field.elevation(p)
 	for _, dp := range D {
 		np := p.Plus(&dp)
@@ -110,39 +67,46 @@ func nbrs(p IntPos, field *Field) []IntPos {
 	return neighbours
 }
 
+type Path struct {
+	points    []IntPos // all path points
+	heuristic int      // minimum distance to the destination point
+}
+
+func (p *Path) LessThan(j utils.PQItem) bool {
+	q := j.(*Path)
+	return len(p.points)+p.heuristic < len(q.points)+q.heuristic
+}
+
 // A* has been stolen from https://ru.wikipedia.org/wiki/A*
 func astar(field *Field, S, E IntPos) int {
-	closed := make(map[IntPos]bool)
-	open := make(PriorityQueue, 0)
-	heap.Init(&open)
+	visited := utils.NewSet[IntPos]()
 
-	path_start := &Item{
-		path: []IntPos{S}, priority: utils.Manhattan(S, E),
-	}
-	heap.Push(&open, path_start)
+	queue := utils.NewPq[*Path]()
+	queue.Push(&Path{
+		points: []IntPos{S}, heuristic: utils.Manhattan(S, E),
+	})
 
-	for open.Len() > 0 {
-		p := heap.Pop(&open).(*Item)
-		p_last := p.path[len(p.path)-1]
+	for !queue.Empty() {
+		item := queue.Pop()
 
-		_, exists := closed[p_last]
-		if exists {
+		last := item.points[len(item.points)-1]
+		if visited.Contains(last) {
 			continue
 		}
 
-		if p_last == E {
-			return len(p.path) - 1
+		if last == E {
+			return len(item.points) - 1
 		}
-		closed[p_last] = true
+		visited.Add(last)
 
-		for _, np := range nbrs(p_last, field) {
-			tp := make([]IntPos, len(p.path))
-			copy(tp, p.path)
-			ni := &Item{
-				path:     append(tp, np),
-				priority: utils.Manhattan(np, E),
+		for _, np := range nbrs(last, field) {
+			temp_path := make([]IntPos, len(item.points), len(item.points)+1)
+			copy(temp_path, item.points)
+			new_item := &Path{
+				points:    append(temp_path, np),
+				heuristic: utils.Manhattan(np, E),
 			}
-			heap.Push(&open, ni)
+			queue.Push(new_item)
 		}
 	}
 	return -100
