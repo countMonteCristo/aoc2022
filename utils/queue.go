@@ -61,7 +61,7 @@ func (pq *PQ[T]) Empty() bool {
 
 // ------------------------------------- Internal priority queue realization -------------------------------------------
 
-// An heap_item is something we manage in a priority queue.
+// A heap_item is something we manage in a priority queue.
 type heap_item[T PQItem] struct {
 	value *T  // user data
 	index int // index of the item in the heap

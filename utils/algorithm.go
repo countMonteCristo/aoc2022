@@ -44,7 +44,7 @@ func SumIfP[T Number](items []T, pred func(*T) bool) (count T) {
 	return
 }
 
-func SumIf[T Number](items []T, pred func(T) bool) (count T) {
+func SumIf[T Number](items []T, pred func(T) bool) T {
 	return SumIfP(items, Deref(pred))
 }
 
@@ -52,11 +52,11 @@ func SumValueP[T any, V Number](items []T, f func(*T) V) V {
 	return Sum(TransformP(items, f))
 }
 
-func SumValue[T any, V Number](items []T, f func(T) V) (count V) {
+func SumValue[T any, V Number](items []T, f func(T) V) V {
 	return Sum(Transform(items, f))
 }
 
-func Sum[V Number](items []V) (count V) {
+func Sum[V Number](items []V) V {
 	return SumIf(items, True[V])
 }
 
