@@ -50,6 +50,12 @@ func (s *Set[T]) Iter() map[T]bool {
 	return s.items
 }
 
+func (s *Set[T]) Clear() {
+	for k := range s.items {
+		delete(s.items, k)
+	}
+}
+
 func (s *Set[T]) Update(q *Set[T]) {
 	UpdateMap(s.items, q.items)
 }

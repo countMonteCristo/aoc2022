@@ -39,4 +39,7 @@ func TestSet(t *testing.T) {
 	q.Add(4)
 	s.Update(q)
 	assert.True(t, s.Contains(4))
+
+	s.Clear()
+	assert.Equal(t, 0, s.Len())
 }

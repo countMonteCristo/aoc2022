@@ -22,8 +22,33 @@ type Item struct {
 	Value int
 }
 
+func (i *Item) String() (s string) {
+	switch i.Type {
+	case TypeOpen:
+		s += "["
+	case TypeClosed:
+		s += "]"
+	case TypeValue:
+		s += strconv.Itoa(i.Value)
+	}
+	return
+}
+
 type Packet []*Item
 type PacketPairs [][]Packet
+
+func (p Packet) String() (s string) {
+	for index, i := range p {
+		s += fmt.Sprintf("%v", i)
+		if i.Type != TypeOpen {
+			s += ","
+		}
+		if i.Type == TypeClosed && p[index-1].Type != TypeOpen {
+			s = s[:len(s)-3] + "],"
+		}
+	}
+	return s[:len(s)-1]
+}
 
 func parsePacket(line string) Packet {
 	array := make(Packet, 0)
@@ -136,10 +161,10 @@ func solve_1(groups PacketPairs) (ans int) {
 	return
 }
 
-func solve_2(data PacketPairs) (ans int) {
+func solve_2(groups PacketPairs) (ans int) {
 	packets := make([]Packet, 0)
-	for _, lists := range data {
-		packets = append(packets, lists...)
+	for _, group := range groups {
+		packets = append(packets, group...)
 	}
 	p1, p2 := parsePacket("[[2]]"), parsePacket("[[6]]")
 	packets = append(packets, p1, p2)
