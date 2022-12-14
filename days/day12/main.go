@@ -10,18 +10,18 @@ import (
 
 func prepare(lines []string) (field *Field) {
 	field = &Field{
-		data: lines, size: IntPos{X: len(lines[0]), Y: len(lines)},
+		data: lines, size: IntPoint{X: len(lines[0]), Y: len(lines)},
 		elev: make(map[byte]int),
 	}
 	for i, line := range field.data {
 		for j, c := range line {
 			ec := c
 			if c == 'E' {
-				field.e = IntPos{X: j, Y: i}
+				field.e = IntPoint{X: j, Y: i}
 				ec = 'z'
 			}
 			if c == 'S' {
-				field.s = IntPos{X: j, Y: i}
+				field.s = IntPoint{X: j, Y: i}
 				ec = 'a'
 			}
 			field.elev[line[j]] = int(ec) - int('a')
@@ -30,30 +30,30 @@ func prepare(lines []string) (field *Field) {
 	return
 }
 
-type IntPos = utils.Pos[int]
+type IntPoint = utils.Point2d[int]
 
-var D = []IntPos{
+var D = []IntPoint{
 	{X: -1, Y: 0}, {X: 0, Y: -1}, {X: 1, Y: 0}, {X: 0, Y: 1},
 }
 
 type Field struct {
 	data []string
-	s    IntPos
-	e    IntPos
-	size IntPos
+	s    IntPoint
+	e    IntPoint
+	size IntPoint
 	elev map[byte]int
 }
 
-func (f *Field) elevation(p IntPos) int {
+func (f *Field) elevation(p IntPoint) int {
 	return f.elev[f.data[p.Y][p.X]]
 }
 
-func (f *Field) contains(p IntPos) bool {
+func (f *Field) contains(p IntPoint) bool {
 	return p.X >= 0 && p.X < f.size.X && p.Y >= 0 && p.Y < f.size.Y
 }
 
-func nbrs(p IntPos, field *Field) []IntPos {
-	neighbours := make([]IntPos, 0, len(D))
+func nbrs(p IntPoint, field *Field) []IntPoint {
+	neighbours := make([]IntPoint, 0, len(D))
 	e := field.elevation(p)
 	for _, dp := range D {
 		np := p.Plus(&dp)
@@ -68,8 +68,8 @@ func nbrs(p IntPos, field *Field) []IntPos {
 }
 
 type Path struct {
-	points    []IntPos // all path points
-	heuristic int      // minimum distance to the destination point
+	points    []IntPoint // all path points
+	heuristic int        // minimum distance to the destination point
 }
 
 func (p Path) LessThan(j utils.PQItem) bool {
@@ -78,12 +78,12 @@ func (p Path) LessThan(j utils.PQItem) bool {
 }
 
 // A* has been stolen from https://ru.wikipedia.org/wiki/A*
-func astar(field *Field, S, E IntPos) int {
-	visited := utils.NewSet[IntPos]()
+func astar(field *Field, S, E IntPoint) int {
+	visited := utils.NewSet[IntPoint]()
 
 	queue := utils.NewPq[Path]()
 	queue.Push(&Path{
-		points: []IntPos{S}, heuristic: utils.Manhattan(S, E),
+		points: []IntPoint{S}, heuristic: utils.Manhattan(S, E),
 	})
 
 	for !queue.Empty() {
@@ -100,7 +100,7 @@ func astar(field *Field, S, E IntPos) int {
 		visited.Add(last)
 
 		for _, np := range nbrs(last, field) {
-			temp_path := make([]IntPos, len(item.points), len(item.points)+1)
+			temp_path := make([]IntPoint, len(item.points), len(item.points)+1)
 			copy(temp_path, item.points)
 			new_item := &Path{
 				points:    append(temp_path, np),
@@ -122,7 +122,7 @@ func solve_2(field *Field) (ans int) {
 	for i, line := range field.data {
 		for j, c := range line {
 			if c == 'S' || c == 'a' {
-				x := astar(field, IntPos{X: j, Y: i}, field.e)
+				x := astar(field, IntPoint{X: j, Y: i}, field.e)
 				if x < 0 {
 					continue
 				}

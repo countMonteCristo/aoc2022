@@ -27,16 +27,16 @@ func TestSign(t *testing.T) {
 
 func TestMin(t *testing.T) {
 	assert.Equal(t, 1, utils.MinSlice([]int{2, 5, 2, 1, 7, 4}))
-	assert.Panics(t, func() {utils.MinSlice([]int{})})
+	assert.Panics(t, func() { utils.MinSlice([]int{}) })
 	assert.Equal(t, 1, utils.Min(2, 5, 2, 1, 7, 4))
-	assert.Panics(t, func() {utils.Min[int]()})
+	assert.Panics(t, func() { utils.Min[int]() })
 }
 
 func TestMax(t *testing.T) {
 	assert.Equal(t, 7, utils.MaxSlice([]int{2, 5, 2, 1, 7, 4}))
-	assert.Panics(t, func() {utils.MaxSlice([]int{})})
+	assert.Panics(t, func() { utils.MaxSlice([]int{}) })
 	assert.Equal(t, 7, utils.Max(2, 5, 2, 1, 7, 4))
-	assert.Panics(t, func() {utils.Max[int]()})
+	assert.Panics(t, func() { utils.Max[int]() })
 }
 
 func TestSegs(t *testing.T) {
@@ -62,20 +62,20 @@ func TestSegs(t *testing.T) {
 	assert.False(t, s5.Intersects(&s1))
 }
 
-func TestPosMethods(t *testing.T) {
-	p1 := utils.Pos[int]{X: 1, Y: 2}
+func TestPointMethods(t *testing.T) {
+	p1 := utils.Point2d[int]{X: 1, Y: 2}
 	q1 := p1
-	p2 := utils.Pos[int]{X: 4, Y: 6}
+	p2 := utils.Point2d[int]{X: 4, Y: 6}
 
-	ps := utils.Pos[int]{5, 8}
+	ps := utils.Point2d[int]{5, 8}
 
 	assert.Equal(t, ps, p2.Plus(&p1))
 	assert.Equal(t, ps, p1.Plus(&p2))
 
-	assert.Equal(t, utils.Pos[int]{3, 4}, p2.Minus(&p1))
-	assert.Equal(t, utils.Pos[int]{-3, -4}, p1.Minus(&p2))
+	assert.Equal(t, utils.Point2d[int]{3, 4}, p2.Minus(&p1))
+	assert.Equal(t, utils.Point2d[int]{-3, -4}, p1.Minus(&p2))
 
-	assert.Equal(t, utils.Pos[int]{3, 6}, p1.Prod(3))
+	assert.Equal(t, utils.Point2d[int]{3, 6}, p1.Prod(3))
 
 	p1.Add(&p2)
 	assert.Equal(t, ps, p1)
@@ -84,14 +84,14 @@ func TestPosMethods(t *testing.T) {
 	assert.Equal(t, q1, p1)
 
 	p1.Mul(3)
-	assert.Equal(t, utils.Pos[int]{3, 6}, p1)
+	assert.Equal(t, utils.Point2d[int]{3, 6}, p1)
 }
 
 func TestManhattan(t *testing.T) {
-	p1 := utils.Pos[int]{
+	p1 := utils.Point2d[int]{
 		X: 1, Y: 1,
 	}
-	p2 := utils.Pos[int]{
+	p2 := utils.Point2d[int]{
 		X: 4, Y: 6,
 	}
 

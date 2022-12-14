@@ -78,47 +78,46 @@ type Pair[T any] struct {
 	First, Second T
 }
 
-
-type Pos[T Number] struct {
+type Point2d[T Number] struct {
 	X, Y T
 }
 
-func (p *Pos[T]) Add(q *Pos[T]) {
+func (p *Point2d[T]) Add(q *Point2d[T]) {
 	p.Y += q.Y
 	p.X += q.X
 }
 
-func (p *Pos[T]) Plus(q *Pos[T]) Pos[T] {
-	return Pos[T]{
+func (p *Point2d[T]) Plus(q *Point2d[T]) Point2d[T] {
+	return Point2d[T]{
 		X: p.X + q.X,
 		Y: p.Y + q.Y,
 	}
 }
 
-func (p *Pos[T]) Sub(q *Pos[T]) {
+func (p *Point2d[T]) Sub(q *Point2d[T]) {
 	p.Y -= q.Y
 	p.X -= q.X
 }
 
-func (p *Pos[T]) Minus(q *Pos[T]) Pos[T] {
-	return Pos[T]{
+func (p *Point2d[T]) Minus(q *Point2d[T]) Point2d[T] {
+	return Point2d[T]{
 		X: p.X - q.X,
 		Y: p.Y - q.Y,
 	}
 }
 
-func (p *Pos[T]) Mul(k T) {
+func (p *Point2d[T]) Mul(k T) {
 	p.Y *= k
 	p.X *= k
 }
 
-func (p *Pos[T]) Prod(k T) Pos[T] {
-	return Pos[T]{
-		X: k*p.X,
-		Y: k*p.Y,
+func (p *Point2d[T]) Prod(k T) Point2d[T] {
+	return Point2d[T]{
+		X: k * p.X,
+		Y: k * p.Y,
 	}
 }
 
-func Manhattan[T Number](p, q Pos[T]) T {
-	return Abs(p.X - q.X) + Abs(p.Y - q.Y)
+func Manhattan[T Number](p, q Point2d[T]) T {
+	return Abs(p.X-q.X) + Abs(p.Y-q.Y)
 }

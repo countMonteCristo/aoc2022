@@ -8,23 +8,23 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPos = utils.Pos[int]
+type IntPoint = utils.Point2d[int]
 
 type Rope struct {
-	Body []IntPos
+	Body []IntPoint
 }
 
 func NewRope(body_size int) *Rope {
 	return &Rope{
-		Body: make([]IntPos, body_size),
+		Body: make([]IntPoint, body_size),
 	}
 }
 
-func (r *Rope) Head() *IntPos {
+func (r *Rope) Head() *IntPoint {
 	return &r.Body[0]
 }
 
-func (r *Rope) Tail() *IntPos {
+func (r *Rope) Tail() *IntPoint {
 	return &r.Body[r.Len()-1]
 }
 
@@ -32,10 +32,10 @@ func (r *Rope) Len() int {
 	return len(r.Body)
 }
 
-func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPos] {
+func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPoint] {
 	dp := cmd.GetDirection()
 
-	visited := utils.NewSet[IntPos]()
+	visited := utils.NewSet[IntPoint]()
 	for i := 0; i < cmd.Count; i++ {
 		r.Head().Add(&dp)
 
@@ -47,7 +47,7 @@ func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPos] {
 				break
 			}
 
-			dq := IntPos{
+			dq := IntPoint{
 				X: utils.Sign(diff.X), Y: utils.Sign(diff.Y),
 			}
 			r.Body[j].Add(&dq)
@@ -58,10 +58,10 @@ func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPos] {
 	return visited
 }
 
-func (rope *Rope) print(topLeft, size IntPos) {
+func (rope *Rope) print(topLeft, size IntPoint) {
 	for r := topLeft.Y; r <= topLeft.Y+size.Y; r++ {
 		for c := topLeft.X; c <= topLeft.X+size.X; c++ {
-			p := IntPos{X: c, Y: r}
+			p := IntPoint{X: c, Y: r}
 			j := "*"
 			for k, q := range rope.Body {
 				if p == q {
@@ -85,12 +85,12 @@ type Cmd struct {
 	Count int
 }
 
-var CmdDirMap = map[string]IntPos{
+var CmdDirMap = map[string]IntPoint{
 	"U": {X: 0, Y: -1}, "D": {X: 0, Y: 1},
 	"L": {X: -1, Y: 0}, "R": {X: 1, Y: 0},
 }
 
-func (cmd *Cmd) GetDirection() (d IntPos) {
+func (cmd *Cmd) GetDirection() (d IntPoint) {
 	d, exists := CmdDirMap[cmd.Dir]
 	if !exists {
 		panic("Unknown direction: " + cmd.Dir)
@@ -111,7 +111,7 @@ func prepare(lines []string) (data DataType) {
 
 func solve(data DataType, rope_len int) int {
 	r := NewRope(rope_len)
-	visited := utils.NewSet[IntPos]()
+	visited := utils.NewSet[IntPoint]()
 	visited.Add(*r.Tail())
 
 	for _, cmd := range data {

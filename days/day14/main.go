@@ -8,7 +8,7 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Pos[int]
+type IntPoint = utils.Point2d[int]
 
 type Cave struct {
 	Rocks      *utils.Set[IntPoint]
