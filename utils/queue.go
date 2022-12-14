@@ -30,15 +30,17 @@ import "container/heap"
 // 5. Success!
 //
 
-// An Item is something we manage in a priority queue.
+// The interface your custom type should implement if you want to use it  as an element of the Priority Queue
 type PQItem interface {
 	LessThan(PQItem) bool // Defines the order of items in the priority queue (the smallest item comes first)
 }
 
+// Priority Queue struct
 type PQ[T PQItem] struct {
 	data heap_items[T]
 }
 
+// Create new Priority Queue
 func NewPq[T PQItem]() *PQ[T] {
 	pq := &PQ[T]{
 		data: make(heap_items[T], 0),
@@ -47,14 +49,17 @@ func NewPq[T PQItem]() *PQ[T] {
 	return pq
 }
 
+// Push new item to queue
 func (pq *PQ[T]) Push(item *T) {
 	heap.Push(&pq.data, item)
 }
 
+// Push from queue
 func (pq *PQ[T]) Pop() *T {
 	return heap.Pop(&pq.data).(*T)
 }
 
+// Check if queue is empty
 func (pq *PQ[T]) Empty() bool {
 	return pq.data.Len() == 0
 }
@@ -69,22 +74,26 @@ type heap_item[T PQItem] struct {
 
 type heap_items[T PQItem] []*heap_item[T]
 
+// Implement heap.Interface.Len
 func (pq heap_items[T]) Len() int {
 	return len(pq)
 }
 
+// Implement heap.Interface.Less
 func (pq heap_items[T]) Less(i, j int) bool {
 	v1 := pq[i].value
 	v2 := pq[j].value
 	return (*v1).LessThan(*v2)
 }
 
+// Implement heap.Interface.Swap
 func (pq heap_items[T]) Swap(i, j int) {
 	pq[i], pq[j] = pq[j], pq[i]
 	pq[i].index = i
 	pq[j].index = j
 }
 
+// Implement heap.Interface.Push
 func (pq *heap_items[T]) Push(x any) {
 	n := len(*pq)
 	value := x.(*T)
@@ -92,6 +101,7 @@ func (pq *heap_items[T]) Push(x any) {
 	*pq = append(*pq, item)
 }
 
+// Implement heap.Interface.Pop
 func (pq *heap_items[T]) Pop() any {
 	old := *pq
 	n := len(old)

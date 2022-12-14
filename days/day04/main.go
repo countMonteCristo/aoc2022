@@ -10,11 +10,11 @@ import (
 
 type PairSeg utils.Pair[utils.Segment]
 
-func pairFromStr(str string) (p PairSeg) {
+func pairFromStr(str string) *PairSeg {
 	pair := strings.Split(str, ",")
-	p.First = segmentFromStr(pair[0])
-	p.Second = segmentFromStr(pair[1])
-	return
+	return &PairSeg{
+		First: segmentFromStr(pair[0]), Second: segmentFromStr(pair[1]),
+	}
 }
 
 func segmentFromStr(str string) (i utils.Segment) {
@@ -24,7 +24,7 @@ func segmentFromStr(str string) (i utils.Segment) {
 	return
 }
 
-func prepare(lines []string) (pairs []PairSeg) {
+func prepare(lines []string) (pairs []*PairSeg) {
 	for _, line := range lines {
 		p := pairFromStr(line)
 		pairs = append(pairs, p)
@@ -32,14 +32,14 @@ func prepare(lines []string) (pairs []PairSeg) {
 	return
 }
 
-func part_1(pairs []PairSeg) {
-	ans := utils.CountIfP(pairs, func(p *PairSeg) bool { return p.First.Contains(&p.Second) || p.Second.Contains(&p.First) })
+func part_1(pairs []*PairSeg) {
+	ans := utils.CountIf(pairs, func(p *PairSeg) bool { return p.First.Contains(&p.Second) || p.Second.Contains(&p.First) })
 	utils.CheckTask(1, ans, 431)
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
-func part_2(pairs []PairSeg) {
-	ans := utils.CountIfP(pairs, func(p *PairSeg) bool { return p.First.Intersects(&p.Second) })
+func part_2(pairs []*PairSeg) {
+	ans := utils.CountIf(pairs, func(p *PairSeg) bool { return p.First.Intersects(&p.Second) })
 	utils.CheckTask(2, ans, 823)
 	fmt.Println("[Part 2] Answer:", ans)
 }

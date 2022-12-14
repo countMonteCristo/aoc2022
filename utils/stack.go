@@ -9,6 +9,7 @@ type Stack[T any] struct {
 	data []T
 }
 
+// Push new value to the Stack
 func (s *Stack[T]) Push(e T) {
 	s.data = append(s.data, e)
 }

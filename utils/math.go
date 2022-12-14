@@ -5,9 +5,10 @@ import (
 )
 
 type Number interface {
-	int8 | int16 | int32 | int64 | int | float32 | float64
+	int8 | int16 | int32 | int64 | int | float32 | float64 | uint8 | uint16 | uint32 | uint64 | uint
 }
 
+// Absolute value of number
 func Abs[T Number](x T) T {
 	if x < 0 {
 		return -x
@@ -15,19 +16,24 @@ func Abs[T Number](x T) T {
 	return x
 }
 
+// Sign of number
 func Sign[T Number](x T) int {
-	if x < 0 {
+	switch {
+	case x < 0:
 		return -1
-	} else if x > 0 {
+	case x > 0:
 		return 1
+	default:
+		return 0
 	}
-	return 0
 }
 
+// Get minimum number from arguments `args`
 func Min[T constraints.Ordered](args ...T) T {
 	return MinSlice(args)
 }
 
+// Get minimum number from slice `args`
 func MinSlice[T constraints.Ordered](args []T) T {
 	if len(args) == 0 {
 		panic("No arguments provided for Min function")
@@ -41,10 +47,12 @@ func MinSlice[T constraints.Ordered](args []T) T {
 	return min
 }
 
+// Get maximum number from arguments `args`
 func Max[T constraints.Ordered](args ...T) T {
 	return MaxSlice(args)
 }
 
+// Get maximum number from slice `args`
 func MaxSlice[T constraints.Ordered](args []T) T {
 	if len(args) == 0 {
 		panic("No arguments provided for Max function")
@@ -78,15 +86,18 @@ type Pair[T any] struct {
 	First, Second T
 }
 
+// Point on 2D plane
 type Point2d[T Number] struct {
 	X, Y T
 }
 
+// p += q
 func (p *Point2d[T]) Add(q *Point2d[T]) {
 	p.Y += q.Y
 	p.X += q.X
 }
 
+// x = p + q
 func (p *Point2d[T]) Plus(q *Point2d[T]) Point2d[T] {
 	return Point2d[T]{
 		X: p.X + q.X,
@@ -94,11 +105,13 @@ func (p *Point2d[T]) Plus(q *Point2d[T]) Point2d[T] {
 	}
 }
 
+// p -= q
 func (p *Point2d[T]) Sub(q *Point2d[T]) {
 	p.Y -= q.Y
 	p.X -= q.X
 }
 
+// x = p - q
 func (p *Point2d[T]) Minus(q *Point2d[T]) Point2d[T] {
 	return Point2d[T]{
 		X: p.X - q.X,
@@ -106,11 +119,13 @@ func (p *Point2d[T]) Minus(q *Point2d[T]) Point2d[T] {
 	}
 }
 
+// p *= k
 func (p *Point2d[T]) Mul(k T) {
 	p.Y *= k
 	p.X *= k
 }
 
+// x = p * k
 func (p *Point2d[T]) Prod(k T) Point2d[T] {
 	return Point2d[T]{
 		X: k * p.X,
@@ -118,6 +133,7 @@ func (p *Point2d[T]) Prod(k T) Point2d[T] {
 	}
 }
 
+// |p| = |p.x - q.x| + |p.y - q.y|
 func Manhattan[T Number](p, q Point2d[T]) T {
 	return Abs(p.X-q.X) + Abs(p.Y-q.Y)
 }

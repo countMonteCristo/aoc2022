@@ -13,9 +13,6 @@ func TestCountIf(t *testing.T) {
 
 	count_got := utils.CountIf(data, func(x int) bool { return x%2 == 0 })
 	assert.Equal(t, 3, count_got, "CountIf test failed")
-
-	countp_got := utils.CountIfP(data, func(x *int) bool { return *x%2 == 1 })
-	assert.Equal(t, 4, countp_got, "CountIf test failed")
 }
 
 func TestSumIf(t *testing.T) {
@@ -24,17 +21,11 @@ func TestSumIf(t *testing.T) {
 	sumif_got := utils.SumIf(data, func(x int) bool { return x%2 == 0 })
 	assert.Equal(t, 12, sumif_got, "SumIf test failed")
 
-	sumifp_got := utils.SumIfP(data, func(x *int) bool { return *x%2 == 1 })
-	assert.Equal(t, 16, sumifp_got, "SumIfP test failed")
-
 	sum_got := utils.Sum(data)
 	assert.Equal(t, 28, sum_got, "Sum test failed")
 
 	sumv_got := utils.SumValue(data, func(x int) int { return x * x })
 	assert.Equal(t, 140, sumv_got, "SumValue test failed")
-
-	sumvp_got := utils.SumValueP(data, func(x *int) int { return *x * *x })
-	assert.Equal(t, 140, sumvp_got, "SumValueP test failed")
 }
 
 func TestTransform(t *testing.T) {
@@ -43,9 +34,6 @@ func TestTransform(t *testing.T) {
 
 	res_got := utils.Transform(data, func(x int) int { return x * x })
 	assert.EqualValues(t, res_want, res_got, "Transform test failed")
-
-	resp_got := utils.TransformP(data, func(x *int) int { return *x * *x })
-	assert.EqualValues(t, resp_got, res_got, "TransformP test failed")
 }
 
 func TestFilter(t *testing.T) {
@@ -54,9 +42,6 @@ func TestFilter(t *testing.T) {
 
 	res_got := utils.Filter(data, func(x int) bool { return x%2 == 0})
 	assert.EqualValues(t, even, res_got)
-
-	resp_got := utils.FilterP(data, func(x *int) bool { return *x%2 == 0})
-	assert.EqualValues(t, even, resp_got)
 }
 
 func TestPreds(t *testing.T) {
