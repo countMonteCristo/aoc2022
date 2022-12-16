@@ -19,7 +19,7 @@ import "container/heap"
 //		}
 //
 // 2. Create priority queue:
-//		pq := utils.NewPriorityQueue[Fruit]()
+//		pq := utils.NewPq[Fruit]()
 //
 // 3. Push new item:
 //		pq.Push(&Fruit{name: "apple", priority: 3})
@@ -62,6 +62,11 @@ func (pq *PQ[T]) Pop() *T {
 // Check if queue is empty
 func (pq *PQ[T]) Empty() bool {
 	return pq.data.Len() == 0
+}
+
+// Size of 
+func (pq *PQ[T]) Len() int {
+	return pq.data.Len()
 }
 
 // ------------------------------------- Internal priority queue realization -------------------------------------------

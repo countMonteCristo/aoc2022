@@ -69,3 +69,11 @@ func (s *Set[T]) Clear() {
 func (s *Set[T]) Update(q *Set[T]) {
 	UpdateMap(s.items, q.items)
 }
+
+func (s *Set[T]) Copy() *Set[T] {
+	ns := NewSet[T]()
+	for key, value := range s.items {
+		ns.items[key] = value
+	}
+	return ns
+}
