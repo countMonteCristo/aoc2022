@@ -1,5 +1,9 @@
 package utils
 
+type Summable interface {
+	Number | string
+}
+
 // Identity function
 func Id[T any](x T) T {
 	return x
@@ -26,7 +30,7 @@ func CountIf[T any](items []T, pred func(T) bool) (count int) {
 }
 
 // Sum the numbers in `items` for which pred(number) == true
-func SumIf[T Number](items []T, pred func(T) bool) (sum T) {
+func SumIf[T Summable](items []T, pred func(T) bool) (sum T) {
 	for _, item := range items {
 		if pred(item) {
 			sum += item
@@ -36,12 +40,12 @@ func SumIf[T Number](items []T, pred func(T) bool) (sum T) {
 }
 
 // Sum the values for each element in `items`. Value of element is computed as value = f(element)
-func SumValue[T any, V Number](items []T, f func(T) V) V {
+func SumValue[T any, V Summable](items []T, f func(T) V) V {
 	return Sum(Transform(items, f))
 }
 
 // Sums all numbers in array
-func Sum[V Number](items []V) V {
+func Sum[V Summable](items []V) V {
 	return SumIf(items, True[V])
 }
 

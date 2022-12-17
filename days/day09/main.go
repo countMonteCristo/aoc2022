@@ -101,11 +101,11 @@ func (cmd *Cmd) GetDirection() (d IntPoint) {
 type DataType []Cmd
 
 func prepare(lines []string) (data DataType) {
-	for _, line := range lines {
+	data = utils.Transform(lines, func(line string)Cmd{
 		parts := strings.Split(line, " ")
 		count, _ := strconv.Atoi(parts[1])
-		data = append(data, Cmd{Dir: parts[0], Count: count})
-	}
+		return Cmd{Dir: parts[0], Count: count}
+	})
 	return
 }
 

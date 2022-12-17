@@ -22,12 +22,11 @@ var rule = map[string]StrategyType{
 	"C": {"X": "Y", "Y": "Z", "Z": "X"},
 }
 
-func getScore(lines []string, fn func([]string) int) (total int) {
-	for _, line := range lines {
+func getScore(lines []string, fn func([]string) int) int {
+	return utils.SumValue(lines, func(line string)int{
 		round := strings.Split(line, " ")
-		total += fn(round)
-	}
-	return
+		return fn(round)
+	})
 }
 
 func part_1(input []string) {

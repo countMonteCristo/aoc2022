@@ -31,11 +31,10 @@ func apply(commands []Command, stacks []StrStack, is9001 bool) {
 	}
 }
 
-func getTop(stacks []StrStack) (top string) {
-	for _, s := range stacks {
-		top += s.Top()
-	}
-	return
+func getTop(stacks []StrStack) string {
+	return utils.SumValue(stacks, func (s StrStack)string {
+		return s.Top()
+	})
 }
 
 func prepare(lines []string) ([]StrStack, []Command) {

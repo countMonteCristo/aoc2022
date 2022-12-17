@@ -37,15 +37,13 @@ func common(rucks []string) rune {
 	panic("No common chars found")
 }
 
-func process_1(lines []string) (total int) {
-	for _, line := range lines {
-		common := common([]string{
+func process_1(lines []string) int {
+	return utils.SumValue(lines, func(line string)int{
+		return priority(common([]string{
 			line[:len(line)/2],
 			line[len(line)/2:],
-		})
-		total += priority(common)
-	}
-	return
+		}))
+	})
 }
 
 func process_2(lines []string, ngroups int) (total int) {

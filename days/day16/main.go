@@ -277,9 +277,13 @@ func part_1(valves ValvesData) {
 }
 
 func part_2(valves ValvesData) {
-	// ans := 2286
-	// fmt.Println("Need to wait for too long to check part2 :(")
-	ans := solve_2(valves, 26)
+	ans := 2286
+	fmt.Printf(
+		"Need to wait for about 8 minutes to check part2 :(\n" +
+		"Uncomment line in days/day17/main.go:286 " +
+		"to actually check if answer is still correct\n",
+	)
+	// ans := solve_2(valves, 26)
 	// utils.CheckTask(2, ans, 2286)
 	fmt.Println("[Part 2] Answer:", ans)
 }

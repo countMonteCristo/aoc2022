@@ -4,32 +4,23 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 
 	"aoc2022/utils"
 )
 
 func prepare(lines []string) (calories []int) {
-	current := 0
-	for _, energy_str := range lines {
-		if len(energy_str) == 0 {
-			calories = append(calories, current)
-			current = 0
-		} else {
-			energy, _ := strconv.Atoi(energy_str)
-			current += energy
-		}
-	}
-	calories = append(calories, current)
+	calories = utils.Transform(strings.Split(strings.Join(lines, "\n"), "\n\n"), func(s string)int{
+		return utils.Sum(utils.Transform(strings.Split(s, "\n"), func(c string)int{
+			energy, _ := strconv.Atoi(c)
+			return energy
+		}))
+	})
 	return
 }
 
 func part_1(calories []int) {
-	ans := 0
-	for _, q := range calories {
-		if q >= ans {
-			ans = q
-		}
-	}
+	ans := utils.MaxSlice(calories)
 	utils.CheckTask(1, ans, 72070)
 	fmt.Println("[Part 1] Answer:", ans)
 }

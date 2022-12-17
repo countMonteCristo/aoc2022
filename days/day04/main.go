@@ -24,12 +24,8 @@ func segmentFromStr(str string) (i utils.Segment) {
 	return
 }
 
-func prepare(lines []string) (pairs []*PairSeg) {
-	for _, line := range lines {
-		p := pairFromStr(line)
-		pairs = append(pairs, p)
-	}
-	return
+func prepare(lines []string) []*PairSeg {
+	return utils.Transform(lines, pairFromStr)
 }
 
 func part_1(pairs []*PairSeg) {

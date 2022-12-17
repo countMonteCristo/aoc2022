@@ -15,20 +15,15 @@ type Cmd struct {
 type DataType []Cmd
 
 func prepare(lines []string) (data DataType) {
-	for _, line := range lines {
+	data = utils.Transform(lines, func(line string) (c Cmd) {
 		parts := strings.Split(line, " ")
-		arg := 0
-		time := 1
-		switch parts[0] {
-		case "noop":
-		case "addx":
-			time = 2
-			arg, _ = strconv.Atoi(parts[1])
-		default:
-			panic("unknown command: " + parts[0])
+		c.Time = 1
+		if parts[0] == "addx" {
+			c.Time = 2
+			c.Arg, _ = strconv.Atoi(parts[1])
 		}
-		data = append(data, Cmd{Arg: arg, Time: time})
-	}
+		return
+	})
 	return
 }
 
