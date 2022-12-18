@@ -32,19 +32,16 @@ func apply(commands []Command, stacks []StrStack, is9001 bool) {
 }
 
 func getTop(stacks []StrStack) string {
-	return utils.SumValue(stacks, func (s StrStack)string {
+	return utils.SumValue(stacks, func(s StrStack) string {
 		return s.Top()
 	})
 }
 
 func prepare(lines []string) ([]StrStack, []Command) {
-	i_empty := 0
-	for i, line := range lines {
-		if len(line) == 0 {
-			i_empty = i
-			break
-		}
-	}
+	i_empty := utils.FindIndexIf(lines, func(line string) bool {
+		return len(line) == 0
+	})
+
 	ids_str := strings.Trim(lines[i_empty-1], " ")
 	ids := strings.Split(ids_str, "   ")
 

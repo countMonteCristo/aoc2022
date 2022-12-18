@@ -69,9 +69,26 @@ func Filter[T any](items []T, pred func(T) bool) []T {
 	return res
 }
 
+// Get first item from slice such that pred(item) == true or -1
+func FindIndexIf[T any](items []T, pred func(T) bool) int {
+	for index, item := range items {
+		if pred(item) {
+			return index
+		}
+	}
+	return -1
+}
+
 // Adds all key-value pairs from second map to first
 func UpdateMap[T comparable, V any](first, second map[T]V) {
 	for key, value := range second {
 		first[key] = value
 	}
 }
+
+// Ideas:
+//
+// 1. Apply
+// 2. Map* algorithms
+// 3. Str* algorithms
+// ...

@@ -81,7 +81,6 @@ func (room *Room) Clear() {
 	for k := range room.Heights {
 		delete(room.Heights, k)
 	}
-
 }
 
 func prepare(lines []string) (room *Room) {
