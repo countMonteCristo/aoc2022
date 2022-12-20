@@ -66,6 +66,10 @@ func MaxSlice[T constraints.Ordered](args []T) T {
 	return max
 }
 
+func MinMax[T constraints.Ordered](x, y T) (T, T) {
+	return Min(x, y), Max(x, y)
+}
+
 // Segment AB on X-axis where x(A) = Begin, x(B) = End
 // It's assumed that Begin <= End
 type Segment struct {
