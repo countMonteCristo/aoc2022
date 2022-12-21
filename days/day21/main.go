@@ -117,7 +117,7 @@ func (m *Monkey) FindPath(to *Monkey, monkeys Monkeys) Path {
 }
 
 func prepare(lines []string) (mokeys Monkeys) {
-	mokeys = make(map[string]*Monkey)
+	mokeys = make(Monkeys)
 	for _, line := range lines {
 		m := Monkey{Known: false}
 		parts := strings.Split(line, " ")
