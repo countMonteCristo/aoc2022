@@ -9,8 +9,8 @@ import (
 	"aoc2022/utils"
 )
 
-type Unary = func(int) int
-type Binary = func(int, int) int
+type Unary = utils.Unary[int]
+type Binary = utils.Binary[int]
 
 var Funcs = map[string]Binary{
 	"+": func(x, y int) int { return x + y },

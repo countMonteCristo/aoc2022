@@ -8,6 +8,9 @@ type Number interface {
 	int8 | int16 | int32 | int64 | int | float32 | float64 | uint8 | uint16 | uint32 | uint64 | uint
 }
 
+type Binary[T Number] func(x, y T) T
+type Unary[T Number] func(x T) T
+
 // Absolute value of number
 func Abs[T Number](x T) T {
 	if x < 0 {

@@ -49,3 +49,13 @@ func (s *Stack[T]) Top() T {
 	}
 	return s.data[len(s.data)-1]
 }
+
+// Check if stack is empty
+func (s *Stack[T]) Empty() bool {
+	return len(s.data) == 0
+}
+
+// Get stack size
+func (s *Stack[T]) Size() int {
+	return len(s.data)
+}
