@@ -31,8 +31,8 @@ func part_2(data DataType) {
 }
 
 func main() {
-	// inputFile := "inputs/@@dayXX@@/test1.txt"
-	inputFile := "inputs/@@dayXX@@/input.txt"
+	inputFile := "inputs/@@dayXX@@/test1.txt"
+	// inputFile := "inputs/@@dayXX@@/input.txt"
 	lines := utils.ReadFile(inputFile)
 	data := prepare(lines)
 	part_1(data)
