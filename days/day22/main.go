@@ -450,8 +450,7 @@ func solve(board Board, part2 bool) (ans int) {
 					}
 					np = tp
 					if part2 {
-						dest_facing := board.PointToTunnelFacing[tp]
-						face = (dest_facing + FacingCount/2) % FacingCount
+						face = (board.PointToTunnelFacing[np] + FacingCount/2) % FacingCount
 					}
 				}
 				pos = np

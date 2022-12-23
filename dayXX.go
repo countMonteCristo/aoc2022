@@ -13,7 +13,7 @@ func prepare(lines []string) (data DataType) {
 	return
 }
 
-func solve(data DataType /*args...*/) (ans int) {
+func solve(data DataType) (ans int) {
 	// solve here
 	return
 }
