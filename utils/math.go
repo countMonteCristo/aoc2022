@@ -144,3 +144,29 @@ func (p *Point2d[T]) Prod(k T) Point2d[T] {
 func Manhattan[T Number](p, q Point2d[T]) T {
 	return Abs(p.X-q.X) + Abs(p.Y-q.Y)
 }
+
+// Point in 3D space
+type Point3d[T Number] struct {
+	X, Y, Z T
+}
+
+// Create 3D point from its projection 2d point
+func Point3dFrom2d[T Number](p Point2d[T]) Point3d[T] {
+	return Point3d[T]{
+		X: p.X, Y: p.Y, Z: 0,
+	}
+}
+
+// r = p + q
+func (p *Point3d[T]) Plus(q Point3d[T]) Point3d[T] {
+	return Point3d[T]{
+		X: p.X + q.X, Y: p.Y + q.Y, Z: p.Z + q.Z,
+	}
+}
+
+// r = p - q
+func (p *Point3d[T]) Minus(q Point3d[T]) Point3d[T] {
+	return Point3d[T]{
+		X: p.X - q.X, Y: p.Y - q.Y, Z: p.Z - q.Z,
+	}
+}

@@ -8,9 +8,10 @@ import (
 )
 
 type IntPoint = utils.Point2d[int]
+type IntPoint3d = utils.Point3d[int]
 
 var Zero = IntPoint{X: 0, Y: 0}
-var Zero3d = Point3d{X: 0, Y: 0, Z: 0}
+var Zero3d = IntPoint3d{X: 0, Y: 0, Z: 0}
 
 var DD = []IntPoint{
 	{X: 1, Y: 0}, {X: 0, Y: 1}, {X: -1, Y: 0}, {X: 0, Y: -1},
@@ -90,12 +91,12 @@ func (b *Board) GetWrapped(p, dp IntPoint) IntPoint {
 	return np
 }
 
-func (b *Board) Connected(p, q IntPoint, size int) (y0, a Point3d, connected bool) {
+func (b *Board) Connected(p, q IntPoint, size int) (y0, a IntPoint3d, connected bool) {
 	d := p.Minus(q)
 	if utils.Manhattan(d, Zero) == size {
 		connected = true
-		y0 = Point3d{X: (p.X + q.X) / 2, Y: (p.Y + q.Y) / 2, Z: 0}
-		a = Point3d{X: utils.Sign(-d.Y), Y: utils.Sign(d.X), Z: 0}
+		y0 = IntPoint3d{X: (p.X + q.X) / 2, Y: (p.Y + q.Y) / 2, Z: 0}
+		a = IntPoint3d{X: utils.Sign(-d.Y), Y: utils.Sign(d.X), Z: 0}
 	}
 	return
 }
@@ -120,16 +121,16 @@ func (b *Board) GetFaces() []*CubeFace {
 
 				face := &CubeFace{
 					Center2d:   IntPoint{X: j + b.CubeSize/2, Y: i + b.CubeSize/2},
-					Corner:     make(map[IntPoint]Point3d),
+					Corner:     make(map[IntPoint]IntPoint3d),
 					RealCorner: make(map[IntPoint]IntPoint),
 				}
-				face.Center = FromIntPoint(face.Center2d)
+				face.Center = utils.Point3dFrom2d(face.Center2d)
 
 				p1 := IntPoint{X: j, Y: i}
 				p2 := p1
 				for i := 0; i < FacingCount; i++ {
 					d := DD[i]
-					face.Corner[p1] = FromIntPoint(p1)
+					face.Corner[p1] = utils.Point3dFrom2d(p1)
 					face.RealCorner[p1] = p2
 					d1, d2 := d.Prod(b.CubeSize), d.Prod(b.CubeSize-1)
 					p1.Add(d1)
@@ -253,31 +254,10 @@ func (b *Board) CreateTunnelsFromFolded(faces []*CubeFace) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-type Point3d struct {
-	X, Y, Z int
-}
-
-func FromIntPoint(p IntPoint) Point3d {
-	return Point3d{X: p.X, Y: p.Y, Z: 0}
-}
-
-func (p *Point3d) Plus(q Point3d) Point3d {
-	return Point3d{
-		X: p.X + q.X, Y: p.Y + q.Y, Z: p.Z + q.Z,
-	}
-}
-func (p *Point3d) Minus(q Point3d) Point3d {
-	return Point3d{
-		X: p.X - q.X, Y: p.Y - q.Y, Z: p.Z - q.Z,
-	}
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
 type CubeFace struct {
-	Center     Point3d
+	Center     IntPoint3d
 	Center2d   IntPoint
-	Corner     map[IntPoint]Point3d
+	Corner     map[IntPoint]IntPoint3d
 	RealCorner map[IntPoint]IntPoint
 }
 
@@ -293,7 +273,7 @@ func (f *CubeFace) GetCommonEdge(o *CubeFace) (edge [][2]IntPoint) {
 	return
 }
 
-func (c *CubeFace) Rotate(y0, a Point3d) {
+func (c *CubeFace) Rotate(y0, a IntPoint3d) {
 	m := GetMatrix(a, 1)
 	nc := y0.Plus(m.Mul(c.Center.Minus(y0)))
 	if nc.Z < 0 {
@@ -303,7 +283,7 @@ func (c *CubeFace) Rotate(y0, a Point3d) {
 
 	c.Center = nc
 
-	new_corners := make(map[IntPoint]Point3d)
+	new_corners := make(map[IntPoint]IntPoint3d)
 	for p2, p3 := range c.Corner {
 		np3 := y0.Plus(m.Mul(p3.Minus(y0)))
 		new_corners[p2] = np3
@@ -315,7 +295,7 @@ func (c *CubeFace) Rotate(y0, a Point3d) {
 
 type Matrix [3][3]int
 
-func GetMatrix(a Point3d, s int) Matrix {
+func GetMatrix(a IntPoint3d, s int) Matrix {
 	x, y, z := a.X, a.Y, a.Z
 	return Matrix{
 		{x * x, x*y - s*z, x*z + s*y},
@@ -324,8 +304,8 @@ func GetMatrix(a Point3d, s int) Matrix {
 	}
 }
 
-func (m Matrix) Mul(p Point3d) Point3d {
-	return Point3d{
+func (m Matrix) Mul(p IntPoint3d) IntPoint3d {
+	return IntPoint3d{
 		X: m[0][0]*p.X + m[0][1]*p.Y + m[0][2]*p.Z,
 		Y: m[1][0]*p.X + m[1][1]*p.Y + m[1][2]*p.Z,
 		Z: m[2][0]*p.X + m[2][1]*p.Y + m[2][2]*p.Z,

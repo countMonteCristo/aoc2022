@@ -38,7 +38,7 @@ func getTop(stacks []StrStack) string {
 }
 
 func prepare(lines []string) ([]StrStack, []Command) {
-	i_empty := utils.FindIndexIf(lines, func(line string) bool {
+	i_empty, _ := utils.FindIndexIf(lines, func(line string) bool {
 		return len(line) == 0
 	})
 

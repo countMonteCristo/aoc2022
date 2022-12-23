@@ -1,5 +1,7 @@
 package utils
 
+import "errors"
+
 type Summable interface {
 	Number | string
 }
@@ -70,13 +72,17 @@ func Filter[T any](items []T, pred func(T) bool) []T {
 }
 
 // Get first item from slice such that pred(item) == true or -1
-func FindIndexIf[T any](items []T, pred func(T) bool) int {
+func FindIndexIf[T any](items []T, pred func(T) bool) (int, error) {
 	for index, item := range items {
 		if pred(item) {
-			return index
+			return index, nil
 		}
 	}
-	return -1
+	return -1, errors.New("No such element")
+}
+
+func FindIndex[T comparable](items []T, item T) (int, error) {
+	return FindIndexIf(items, func(i T) bool { return i == item })
 }
 
 // Adds all key-value pairs from second map to first
