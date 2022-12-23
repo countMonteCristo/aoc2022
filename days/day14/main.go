@@ -37,9 +37,9 @@ func (c *Cave) ClearSand() {
 }
 
 func (c *Cave) AddRocks(p1, p2 IntPoint) {
-	delta := p2.Minus(&p1)
+	delta := p2.Minus(p1)
 	dp := IntPoint{X: utils.Sign(delta.X), Y: utils.Sign(delta.Y)}
-	for p := p1; p != p2; p.Add(&dp) {
+	for p := p1; p != p2; p.Add(dp) {
 		c.Rocks.Add(p)
 	}
 	c.Rocks.Add(p2)
@@ -69,7 +69,7 @@ func solve(cave *Cave, maxy, start int, stop func(p IntPoint) bool) (ans int) {
 		p := cave.SandSource
 		for np := p; ; {
 			for _, dp := range cave.SandMoves {
-				if q := p.Plus(&dp); !cave.Rocks.Contains(q) && !cave.Sand.Contains(q) && q.Y <= maxy {
+				if q := p.Plus(dp); !cave.Rocks.Contains(q) && !cave.Sand.Contains(q) && q.Y <= maxy {
 					np = q
 					break
 				}

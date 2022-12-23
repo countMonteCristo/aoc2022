@@ -99,13 +99,13 @@ type Point2d[T Number] struct {
 }
 
 // p += q
-func (p *Point2d[T]) Add(q *Point2d[T]) {
+func (p *Point2d[T]) Add(q Point2d[T]) {
 	p.Y += q.Y
 	p.X += q.X
 }
 
 // x = p + q
-func (p *Point2d[T]) Plus(q *Point2d[T]) Point2d[T] {
+func (p *Point2d[T]) Plus(q Point2d[T]) Point2d[T] {
 	return Point2d[T]{
 		X: p.X + q.X,
 		Y: p.Y + q.Y,
@@ -113,13 +113,13 @@ func (p *Point2d[T]) Plus(q *Point2d[T]) Point2d[T] {
 }
 
 // p -= q
-func (p *Point2d[T]) Sub(q *Point2d[T]) {
+func (p *Point2d[T]) Sub(q Point2d[T]) {
 	p.Y -= q.Y
 	p.X -= q.X
 }
 
 // x = p - q
-func (p *Point2d[T]) Minus(q *Point2d[T]) Point2d[T] {
+func (p *Point2d[T]) Minus(q Point2d[T]) Point2d[T] {
 	return Point2d[T]{
 		X: p.X - q.X,
 		Y: p.Y - q.Y,

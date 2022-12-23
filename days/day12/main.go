@@ -56,7 +56,7 @@ func nbrs(p IntPoint, field *Field) []IntPoint {
 	neighbours := make([]IntPoint, 0, len(D))
 	e := field.elevation(p)
 	for _, dp := range D {
-		np := p.Plus(&dp)
+		np := p.Plus(dp)
 		if field.contains(np) {
 			ne := field.elevation(np)
 			if ne-e <= 1 {

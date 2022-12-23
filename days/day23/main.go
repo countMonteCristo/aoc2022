@@ -36,7 +36,7 @@ var ChoicesIds = [][3]int {
 
 func HasNeighbours(elves Elves, elf IntPoint) bool {
 	for _, d := range DD {
-		if elves.Contains(elf.Plus(&d)) {
+		if elves.Contains(elf.Plus(d)) {
 			return true
 		}
 	}
@@ -45,7 +45,7 @@ func HasNeighbours(elves Elves, elf IntPoint) bool {
 
 func HasFreePlaceAtIds(elves Elves, elf IntPoint, ids [3]int) bool {
 	for _, i := range ids {
-		if elves.Contains(elf.Plus(&DD[i])) {
+		if elves.Contains(elf.Plus(DD[i])) {
 			return false
 		}
 	}
@@ -69,7 +69,7 @@ func diffuseElves(elves Elves, max_steps int) (Elves, int) {
 			for i := choice_id; i<choice_id+len(ChoicesIds); i++ {
 				ids := ChoicesIds[i % len(ChoicesIds)]
 				if HasFreePlaceAtIds(elves, e, ids) {
-					intent = e.Plus(&DD[ids[1]])
+					intent = e.Plus(DD[ids[1]])
 					break
 				}
 			}

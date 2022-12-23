@@ -83,7 +83,7 @@ func solve_2(surf *Surface, vmin, vmax int64) (ans int64) {
 		for i := int64(0); i < 4*rad; i++ {
 			dp := dd[i/rad]
 			if cur.X < vmin || cur.X > vmax || cur.Y < vmin || cur.Y > vmax {
-				cur.Add(&dp)
+				cur.Add(dp)
 				continue
 			}
 			ok := true
@@ -97,7 +97,7 @@ func solve_2(surf *Surface, vmin, vmax int64) (ans int64) {
 				found = true
 				break
 			}
-			cur.Add(&dp)
+			cur.Add(dp)
 		}
 		if found {
 			ans = 4000000*cur.X + cur.Y

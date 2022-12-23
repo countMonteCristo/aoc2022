@@ -31,8 +31,8 @@ func (f *Figure) Init() {
 
 func (f *Figure) CanMove(topLeft, d IntPoint, room *Room, fail func(IntPoint, int64) bool) bool {
 	for r := range f.Rocks.Iter() {
-		np := topLeft.Plus(&r)
-		np.Add(&d)
+		np := topLeft.Plus(r)
+		np.Add(d)
 		if fail(np, room.Width) || room.Rocks.Contains(np) {
 			return false
 		}
@@ -68,7 +68,7 @@ type Room struct {
 
 func (room *Room) AddFigure(f *Figure, topLeft IntPoint) {
 	for r := range f.Rocks.Iter() {
-		np := topLeft.Plus(&r)
+		np := topLeft.Plus(r)
 		room.Rocks.Add(np)
 	}
 }
@@ -136,12 +136,12 @@ func solve(room *Room, N int64) (lastHeight int64) {
 			for {
 				d := dp[room.Commands[cmd_idx]]
 				if fig.CanShift(topLeft, d, room) {
-					topLeft.Add(&d)
+					topLeft.Add(d)
 				}
 				cmd_idx = (cmd_idx + 1) % len(room.Commands)
 
 				if fig.CanFall(topLeft, dp[2], room) {
-					topLeft.Add(&dp[2])
+					topLeft.Add(dp[2])
 				} else {
 					room.AddFigure(fig, topLeft)
 					break

@@ -82,8 +82,8 @@ func (b *Board) Contains(p *IntPoint) bool {
 	return b.Cells[p.Y][p.X] != 0
 }
 
-func (b *Board) GetWrapped(p, dp *IntPoint) IntPoint {
-	np := b.Wrap(*p)
+func (b *Board) GetWrapped(p, dp IntPoint) IntPoint {
+	np := b.Wrap(p)
 	for !b.Contains(&np) {
 		np = b.Wrap(np.Plus(dp))
 	}
@@ -91,7 +91,7 @@ func (b *Board) GetWrapped(p, dp *IntPoint) IntPoint {
 }
 
 func (b *Board) Connected(p, q IntPoint, size int) (y0, a Point3d, connected bool) {
-	d := p.Minus(&q)
+	d := p.Minus(q)
 	if utils.Manhattan(d, Zero) == size {
 		connected = true
 		y0 = Point3d{X: (p.X + q.X) / 2, Y: (p.Y + q.Y) / 2, Z: 0}
@@ -132,8 +132,8 @@ func (b *Board) GetFaces() []*CubeFace {
 					face.Corner[p1] = FromIntPoint(p1)
 					face.RealCorner[p1] = p2
 					d1, d2 := d.Prod(b.CubeSize), d.Prod(b.CubeSize-1)
-					p1.Add(&d1)
-					p2.Add(&d2)
+					p1.Add(d1)
+					p2.Add(d2)
 				}
 
 				faces = append(faces, face)
@@ -154,12 +154,12 @@ func (b *Board) GetTunnelsForEdge(p1, p2 IntPoint) []Tunnel {
 	p := p1
 	for p != p2 {
 		for f, dd := range DD {
-			q := p.Plus(&dd)
+			q := p.Plus(dd)
 			if !b.Contains(&q) {
 				facings[f]++
 			}
 		}
-		p.Add(&dp)
+		p.Add(dp)
 	}
 
 	maxv := 0
@@ -175,7 +175,7 @@ func (b *Board) GetTunnelsForEdge(p1, p2 IntPoint) []Tunnel {
 	for p != p2 {
 		t := Tunnel{Point: p, Facing: maxf}
 		tunnels = append(tunnels, t)
-		p.Add(&dp)
+		p.Add(dp)
 	}
 	tunnels = append(tunnels, Tunnel{Point: p2, Facing: maxf})
 
@@ -369,11 +369,11 @@ func prepare(lines []string, part1 bool) (board Board) {
 				}
 				p := IntPoint{X: j, Y: i}
 				for facing, dp := range DD {
-					np := p.Plus(&dp)
+					np := p.Plus(dp)
 					if board.Contains(&np) {
 						continue
 					}
-					tp := board.GetWrapped(&np, &dp)
+					tp := board.GetWrapped(np, dp)
 					board.Tunnels[Tunnel{Point: p, Facing: facing}] = tp
 				}
 			}
@@ -437,7 +437,7 @@ func solve(board Board, part2 bool) (ans int) {
 		case Go:
 			for i := 0; i < cmd.Steps; i++ {
 				dp := DD[face]
-				np := pos.Plus(&dp)
+				np := pos.Plus(dp)
 				if board.Contains(&np) {
 					if board.Cells[np.Y][np.X] == '#' {
 						break

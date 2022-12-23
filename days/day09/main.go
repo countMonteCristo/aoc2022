@@ -37,10 +37,10 @@ func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPoint] {
 
 	visited := utils.NewSet[IntPoint]()
 	for i := 0; i < cmd.Count; i++ {
-		r.Head().Add(&dp)
+		r.Head().Add(dp)
 
 		for j := 1; j < r.Len(); j++ {
-			diff := r.Body[j-1].Minus(&r.Body[j])
+			diff := r.Body[j-1].Minus(r.Body[j])
 
 			d := utils.Max(utils.Abs(diff.X), utils.Abs(diff.Y))
 			if d <= 1 { // do not move tail, because current knot is not moving
@@ -50,7 +50,7 @@ func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPoint] {
 			dq := IntPoint{
 				X: utils.Sign(diff.X), Y: utils.Sign(diff.Y),
 			}
-			r.Body[j].Add(&dq)
+			r.Body[j].Add(dq)
 		}
 
 		visited.Add(*r.Tail())

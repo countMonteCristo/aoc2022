@@ -69,18 +69,18 @@ func TestPointMethods(t *testing.T) {
 
 	ps := utils.Point2d[int]{5, 8}
 
-	assert.Equal(t, ps, p2.Plus(&p1))
-	assert.Equal(t, ps, p1.Plus(&p2))
+	assert.Equal(t, ps, p2.Plus(p1))
+	assert.Equal(t, ps, p1.Plus(p2))
 
-	assert.Equal(t, utils.Point2d[int]{3, 4}, p2.Minus(&p1))
-	assert.Equal(t, utils.Point2d[int]{-3, -4}, p1.Minus(&p2))
+	assert.Equal(t, utils.Point2d[int]{3, 4}, p2.Minus(p1))
+	assert.Equal(t, utils.Point2d[int]{-3, -4}, p1.Minus(p2))
 
 	assert.Equal(t, utils.Point2d[int]{3, 6}, p1.Prod(3))
 
-	p1.Add(&p2)
+	p1.Add(p2)
 	assert.Equal(t, ps, p1)
 
-	p1.Sub(&p2)
+	p1.Sub(p2)
 	assert.Equal(t, q1, p1)
 
 	p1.Mul(3)
