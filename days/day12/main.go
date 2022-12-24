@@ -30,11 +30,6 @@ func prepare(lines []string) (field *Field) {
 	return
 }
 
-type IntPoint = utils.Point2d[int]
-
-var D = []IntPoint{
-	{X: -1, Y: 0}, {X: 0, Y: -1}, {X: 1, Y: 0}, {X: 0, Y: 1},
-}
 
 type Field struct {
 	data []string
@@ -53,9 +48,9 @@ func (f *Field) contains(p IntPoint) bool {
 }
 
 func nbrs(p IntPoint, field *Field) []IntPoint {
-	neighbours := make([]IntPoint, 0, len(D))
+	neighbours := make([]IntPoint, 0, len(DD))
 	e := field.elevation(p)
-	for _, dp := range D {
+	for _, dp := range DD {
 		np := p.Plus(dp)
 		if field.contains(np) {
 			ne := field.elevation(np)
@@ -79,7 +74,7 @@ func (p Path) LessThan(j utils.PQItem) bool {
 
 // A* has been stolen from https://ru.wikipedia.org/wiki/A*
 func astar(field *Field, S, E IntPoint) int {
-	visited := utils.NewSet[IntPoint]()
+	visited := NewIpSet()
 
 	queue := utils.NewPq[Path]()
 	queue.Push(&Path{

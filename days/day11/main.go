@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -17,11 +16,10 @@ var Funcs = map[string]Binary{
 	"*": func(x, y int) int { return x * y },
 }
 
-func parseArg(a string) (int, bool) {
-	arg := 0
-	is_old := (a == "old")
+func parseArg(a string) (arg int, is_old bool) {
+	is_old = (a == "old")
 	if !is_old {
-		arg, _ = strconv.Atoi(a)
+		arg = StrToInt(a)
 	}
 	return arg, is_old
 }
@@ -57,21 +55,18 @@ type Monkey struct {
 }
 
 func NewMonkey(lines []string) *Monkey {
-	id, _ := strconv.Atoi(strings.Split(strings.Trim(lines[0], ":"), " ")[1])
+	id := StrToInt(strings.Split(strings.Trim(lines[0], ":"), " ")[1])
 
 	items := utils.Transform(
 		strings.Split(strings.Split(lines[1], ": ")[1], ", "),
-		func(i string) int {
-			x, _ := strconv.Atoi(strings.Trim(i, " "))
-			return x
-		},
+		StrToInt,
 	)
 
 	op := parseFunc(strings.Split(lines[2], ": ")[1])
 
-	div_by, _ := strconv.Atoi(strings.Split(lines[3], " ")[5])
-	m_true, _ := strconv.Atoi(strings.Split(lines[4], " ")[9])
-	m_false, _ := strconv.Atoi(strings.Split(lines[5], " ")[9])
+	div_by := StrToInt(strings.Split(lines[3], " ")[5])
+	m_true := StrToInt(strings.Split(lines[4], " ")[9])
+	m_false := StrToInt(strings.Split(lines[5], " ")[9])
 	throw_to := func(x int) int {
 		if x%div_by == 0 {
 			return m_true

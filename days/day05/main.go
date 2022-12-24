@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -58,9 +57,9 @@ func prepare(lines []string) ([]StrStack, []Command) {
 	commands := make([]Command, 0)
 	for ci := i_empty + 1; ci < len(lines); ci++ {
 		parts := strings.Split(lines[ci], " ")
-		count, _ := strconv.Atoi(parts[1])
-		from, _ := strconv.Atoi(parts[3])
-		to, _ := strconv.Atoi(parts[5])
+		count := StrToInt(parts[1])
+		from := StrToInt(parts[3])
+		to := StrToInt(parts[5])
 		cmd := Command{count, from - 1, to - 1}
 		commands = append(commands, cmd)
 	}

@@ -6,11 +6,9 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int]
-type Elves = *utils.Set[IntPoint]
 
-func prepare(lines []string) (elves Elves) {
-	elves = utils.NewSet[IntPoint]()
+func prepare(lines []string) (elves IpSet) {
+	elves = NewIpSet()
 	for i, line := range lines {
 		for j, c := range line {
 			if c == '#' {
@@ -21,7 +19,7 @@ func prepare(lines []string) (elves Elves) {
 	return
 }
 
-var DD = []IntPoint{
+var DP = []IntPoint{
 	{X: -1, Y: -1}, {X: 0, Y: -1}, {X: 1, Y: -1},
 	{X: -1, Y: 0}, {X: 1, Y: 0},
 	{X: -1, Y: 1}, {X: 0, Y: 1}, {X: 1, Y: 1},
@@ -34,8 +32,8 @@ var ChoicesIds = [][3]int {
 	{2, 4, 7},
 }
 
-func HasNeighbours(elves Elves, elf IntPoint) bool {
-	for _, d := range DD {
+func HasNeighbours(elves IpSet, elf IntPoint) bool {
+	for _, d := range DP {
 		if elves.Contains(elf.Plus(d)) {
 			return true
 		}
@@ -43,21 +41,21 @@ func HasNeighbours(elves Elves, elf IntPoint) bool {
 	return false
 }
 
-func HasFreePlaceAtIds(elves Elves, elf IntPoint, ids [3]int) bool {
+func HasFreePlaceAtIds(elves IpSet, elf IntPoint, ids [3]int) bool {
 	for _, i := range ids {
-		if elves.Contains(elf.Plus(DD[i])) {
+		if elves.Contains(elf.Plus(DP[i])) {
 			return false
 		}
 	}
 	return true
 }
 
-func diffuseElves(elves Elves, max_steps int) (Elves, int) {
+func diffuseIpSet(elves IpSet, max_steps int) (IpSet, int) {
 	choice_id := 0
 	step := 1
 
 	for ;;step++ {
-		next := utils.NewSet[IntPoint]()
+		next := NewIpSet()
 		proposes := make(map[IntPoint]IntPoint)
 		for e := range elves.Iter() {
 			if !HasNeighbours(elves, e) {
@@ -69,7 +67,7 @@ func diffuseElves(elves Elves, max_steps int) (Elves, int) {
 			for i := choice_id; i<choice_id+len(ChoicesIds); i++ {
 				ids := ChoicesIds[i % len(ChoicesIds)]
 				if HasFreePlaceAtIds(elves, e, ids) {
-					intent = e.Plus(DD[ids[1]])
+					intent = e.Plus(DP[ids[1]])
 					break
 				}
 			}
@@ -98,8 +96,8 @@ func diffuseElves(elves Elves, max_steps int) (Elves, int) {
 	return elves, step
 }
 
-func solve(elves Elves, max_steps int, part1 bool) (ans int) {
-	elves, steps := diffuseElves(elves, max_steps)
+func solve(elves IpSet, max_steps int, part1 bool) (ans int) {
+	elves, steps := diffuseIpSet(elves, max_steps)
 
 	if part1 {
 		var xmin, xmax, ymin, ymax int
@@ -119,13 +117,13 @@ func solve(elves Elves, max_steps int, part1 bool) (ans int) {
 	return
 }
 
-func part_1(elves Elves) {
+func part_1(elves IpSet) {
 	ans := solve(elves, 10, true)
 	utils.CheckTask(1, ans, 3906)
 	fmt.Println("[Part 1] Answer:", ans)
 }
 
-func part_2(elves Elves) {
+func part_2(elves IpSet) {
 	ans := solve(elves, 9999, false)
 	utils.CheckTask(2, ans, 895)
 	fmt.Println("[Part 2] Answer:", ans)

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sort"
 
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -15,7 +14,7 @@ type ValvesData struct {
 	Valves   ValveMap
 	Working  []WV
 	Paths    PathMap
-	Targets  *utils.Set[string]
+	Targets  StrSet
 	NameToId map[string]uint32
 }
 
@@ -31,7 +30,7 @@ type QueueItem struct {
 	Pressure    int
 	Time        int
 	MaxPressure int
-	Targets     *utils.Set[string]
+	Targets     StrSet
 }
 
 type WV struct {
@@ -44,7 +43,7 @@ func (i QueueItem) LessThan(j utils.PQItem) bool {
 	return i.MaxPressure > jj.MaxPressure
 }
 
-func PredictMaxPressure(targets *utils.Set[string], valves ValvesData, start string, timeLeft int) int {
+func PredictMaxPressure(targets StrSet, valves ValvesData, start string, timeLeft int) int {
 	if timeLeft <= 0 {
 		return 0
 	}
@@ -71,11 +70,11 @@ func (i *QueueItem) String() string {
 func prepare(lines []string) (valves ValvesData) {
 	valves.Valves = make(ValveMap)
 	valves.Working = make([]WV, 0)
-	valves.Targets = utils.NewSet[string]()
+	valves.Targets = NewStrSet()
 	for _, line := range lines {
 		parts := strings.Split(line, " ")
 		v := parts[1]
-		rate, _ := strconv.Atoi(strings.Split(strings.Trim(parts[4], ";"), "=")[1])
+		rate := StrToInt(strings.Split(strings.Trim(parts[4], ";"), "=")[1])
 		connected_valves := utils.Transform(parts[9:], func(s string) string {
 			return strings.Trim(s, ",")
 		})
@@ -183,8 +182,8 @@ func solve_1(valves ValvesData, maxTime int) int {
 
 func solve_2(valves ValvesData, maxTime int) (ans int) {
 	for i := 0; i < (1 << (valves.Targets.Len() - 1)); i++ {
-		t1 := utils.NewSet[string]()
-		t2 := utils.NewSet[string]()
+		t1 := NewStrSet()
+		t2 := NewStrSet()
 		for idx, w := range valves.Working {
 			if i&(1<<idx) > 0 {
 				t1.Add(w.Name)
@@ -217,7 +216,7 @@ type MemKey struct {
 
 var Mem = make(map[MemKey]int)
 
-func find_best_memo(valves ValvesData, maxTime int, targets *utils.Set[string]) (ans int) {
+func find_best_memo(valves ValvesData, maxTime int, targets StrSet) (ans int) {
 	var hash uint32 = 0
 	for v := range targets.Iter() {
 		hash += valves.NameToId[v]
@@ -232,7 +231,7 @@ func find_best_memo(valves ValvesData, maxTime int, targets *utils.Set[string]) 
 }
 
 // Ищем путь по вершинам targets, который максимизирует давление за время maxTime
-func find_best(valves ValvesData, maxTime int, targets *utils.Set[string]) (ans int) {
+func find_best(valves ValvesData, maxTime int, targets StrSet) (ans int) {
 	pq := utils.NewPq[QueueItem]()
 	pq.Push(&QueueItem{
 		Valve: "AA", Pressure: 0, Time: 0, Targets: targets,
@@ -280,8 +279,8 @@ func part_2(valves ValvesData) {
 	ans := 2286
 	fmt.Printf(
 		"Need to wait for about 8 minutes to check part2 :(\n" +
-		"Uncomment line in days/day16/main.go:286 " +
-		"to actually check if answer is still correct\n",
+			"Uncomment line in days/day16/main.go:286 " +
+			"to actually check if answer is still correct\n",
 	)
 	// ans := solve_2(valves, 26)
 	// utils.CheckTask(2, ans, 2286)

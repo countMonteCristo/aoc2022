@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -32,9 +31,12 @@ const (
 
 func TypeToStr(typ int) string {
 	switch typ {
-	case TypeDir: return "dir"
-	case TypeFile: return "file"
-	default: log.Fatal("Unknown FsItem type: ", typ)
+	case TypeDir:
+		return "dir"
+	case TypeFile:
+		return "file"
+	default:
+		log.Fatal("Unknown FsItem type: ", typ)
 	}
 	return "UNKNOWN_FS_TYPE"
 }
@@ -122,7 +124,7 @@ func PrepareFS(lines []string) *FS {
 			dir := NewFsItem(parts[1], TypeDir, 0, current)
 			current.Children[dir.GetName()] = dir
 		default:
-			size, _ := strconv.Atoi(parts[0])
+			size := StrToInt(parts[0])
 			file := NewFsItem(parts[1], TypeFile, size, current)
 			current.Children[file.GetName()] = file
 			current.UpdateSize(file.GetSize())

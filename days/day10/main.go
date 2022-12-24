@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -20,7 +19,7 @@ func prepare(lines []string) (data DataType) {
 		c.Time = 1
 		if parts[0] == "addx" {
 			c.Time = 2
-			c.Arg, _ = strconv.Atoi(parts[1])
+			c.Arg = StrToInt(parts[1])
 		}
 		return
 	})

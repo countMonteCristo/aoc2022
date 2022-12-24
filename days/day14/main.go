@@ -2,17 +2,14 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int]
-
 type Cave struct {
-	Rocks      *utils.Set[IntPoint]
-	Sand       *utils.Set[IntPoint]
+	Rocks      IpSet
+	Sand       IpSet
 	MaxY       int
 	Floor      int
 	SandSource IntPoint
@@ -21,8 +18,8 @@ type Cave struct {
 
 func NewCave() *Cave {
 	return &Cave{
-		Rocks:      utils.NewSet[IntPoint](),
-		Sand:       utils.NewSet[IntPoint](),
+		Rocks:      NewIpSet(),
+		Sand:       NewIpSet(),
 		MaxY:       0,
 		Floor:      0,
 		SandSource: IntPoint{X: 500, Y: 0},
@@ -51,8 +48,8 @@ func prepare(lines []string) (cave *Cave) {
 	for _, line := range lines {
 		points := utils.Transform(strings.Split(line, " -> "), func(s string) (p IntPoint) {
 			c := strings.Split(s, ",")
-			p.X, _ = strconv.Atoi(c[0])
-			p.Y, _ = strconv.Atoi(c[1])
+			p.X = StrToInt(c[0])
+			p.Y = StrToInt(c[1])
 			return
 		})
 		for i := 0; i < len(points)-1; i++ {

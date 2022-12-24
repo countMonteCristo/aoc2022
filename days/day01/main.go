@@ -3,18 +3,14 @@ package main
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
 )
 
 func prepare(lines []string) (calories []int) {
-	calories = utils.Transform(strings.Split(strings.Join(lines, "\n"), "\n\n"), func(s string)int{
-		return utils.Sum(utils.Transform(strings.Split(s, "\n"), func(c string)int{
-			energy, _ := strconv.Atoi(c)
-			return energy
-		}))
+	calories = utils.Transform(strings.Split(strings.Join(lines, "\n"), "\n\n"), func(s string) int {
+		return utils.Sum(utils.Transform(strings.Split(s, "\n"), StrToInt))
 	})
 	return
 }

@@ -9,10 +9,9 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int64]
 type Surface struct {
-	Beacons    *utils.Set[IntPoint]
-	SensorDist map[IntPoint]int64
+	Beacons    *utils.Set[I64Point]
+	SensorDist map[I64Point]int64
 }
 
 func parseFromStr(s, trim string) (res int64) {
@@ -22,15 +21,15 @@ func parseFromStr(s, trim string) (res int64) {
 
 func prepare(lines []string) (surf *Surface) {
 	surf = &Surface{
-		Beacons:    utils.NewSet[IntPoint](),
-		SensorDist: make(map[IntPoint]int64),
+		Beacons:    NewI64pSet(),
+		SensorDist: make(map[I64Point]int64),
 	}
 	for _, line := range lines {
 		parts := strings.Split(line, " ")
-		sensor := IntPoint{
+		sensor := I64Point{
 			X: parseFromStr(parts[2], ","), Y: parseFromStr(parts[3], ":"),
 		}
-		beacon := IntPoint{
+		beacon := I64Point{
 			X: parseFromStr(parts[8], ","), Y: parseFromStr(parts[9], ":"),
 		}
 		surf.Beacons.Add(beacon)
@@ -48,7 +47,7 @@ func solve_1(surf *Surface, y0 int64) (ans int) {
 		}
 	}
 
-	busyX := utils.NewSet[int64]()
+	busyX := NewI64Set()
 	for sensor, sendsor_dist := range surf.SensorDist {
 		// s.X - (sendsor_dist - |s.Y- y0|) <= x <= s.X + (sendsor_dist - |s.Y - y0|)
 		delta := sendsor_dist - utils.Abs(sensor.Y-y0)
@@ -64,7 +63,7 @@ func solve_1(surf *Surface, y0 int64) (ans int) {
 }
 
 func solve_2(surf *Surface, vmin, vmax int64) (ans int64) {
-	sensors := make([]IntPoint, 0)
+	sensors := make([]I64Point, 0)
 	for s := range surf.SensorDist {
 		sensors = append(sensors, s)
 	}
@@ -72,13 +71,13 @@ func solve_2(surf *Surface, vmin, vmax int64) (ans int64) {
 		return surf.SensorDist[sensors[i]] < surf.SensorDist[sensors[j]]
 	})
 
-	dd := []IntPoint{
+	dd := []I64Point{
 		{X: 1, Y: 1}, {X: -1, Y: 1}, {X: -1, Y: -1}, {X: 1, Y: -1},
 	}
 
 	for _, sen := range sensors {
 		rad := surf.SensorDist[sen] + 1
-		cur := IntPoint{X: sen.X, Y: sen.Y - rad}
+		cur := I64Point{X: sen.X, Y: sen.Y - rad}
 		found := false
 		for i := int64(0); i < 4*rad; i++ {
 			dp := dd[i/rad]

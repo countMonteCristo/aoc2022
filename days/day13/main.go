@@ -59,7 +59,7 @@ func parsePacket(line string) Packet {
 			array = append(array, &Item{Type: TypeOpen})
 		case c == ']' || c == ',':
 			if len(num_str) > 0 {
-				v, _ := strconv.Atoi(num_str)
+				v := StrToInt(num_str)
 				array = append(array, &Item{Type: TypeValue, Value: v})
 				num_str = ""
 			}

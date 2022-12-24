@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -46,8 +45,8 @@ func (r *Robot) Print() {
 }
 
 type BluePrint struct {
-	Id     int
-	Robots []*Robot
+	Id      int
+	Robots  []*Robot
 	MaxCost CostType
 }
 
@@ -65,7 +64,7 @@ func (bp *BluePrint) CreateRobot(index int, s *State) (*State, bool) {
 	}
 
 	ns := State{
-		Robots: s.Robots, Resources: s.Resources, TimeLeft: s.TimeLeft-1,
+		Robots: s.Robots, Resources: s.Resources, TimeLeft: s.TimeLeft - 1,
 	}
 
 	for i, c := range bp.Robots[index].Cost {
@@ -103,7 +102,7 @@ func prepare(lines []string) (blueprints DataType) {
 				Type: robotType, Cost: CostType{0, 0, 0, 0},
 			}
 			for j := 3; j < len(words); j += 3 {
-				cost, _ := strconv.Atoi(words[j])
+				cost := StrToInt(words[j])
 				f := Formation[strings.Trim(words[j+1], ".")]
 				robot.Cost[f] = cost
 				bp.MaxCost[f] = utils.Max(bp.MaxCost[f], cost)
@@ -140,18 +139,17 @@ func (s State) LessThan(jj utils.PQItem) bool {
 		return s.TimeLeft > j.TimeLeft
 	}
 
-
 	return false
 }
 
 func dfs(bp *BluePrint, T int) (ans int) {
 	pq := utils.NewPq[State]()
 	pq.Push(&State{
-		Robots: CostType{0,0,0,1}, Resources: CostType{0,0,0,0}, TimeLeft: T,
+		Robots: CostType{0, 0, 0, 1}, Resources: CostType{0, 0, 0, 0}, TimeLeft: T,
 	})
 
 	maxGeodeRobots := make(map[int]int)
-	for i:=0; i <= T; i++ {
+	for i := 0; i <= T; i++ {
 		maxGeodeRobots[i] = 0
 	}
 
@@ -163,11 +161,11 @@ func dfs(bp *BluePrint, T int) (ans int) {
 			continue
 		}
 
-		if s.Resources[0] + s.Robots[0]*s.TimeLeft + s.TimeLeft*(s.TimeLeft-1)/2 < ans {
+		if s.Resources[0]+s.Robots[0]*s.TimeLeft+s.TimeLeft*(s.TimeLeft-1)/2 < ans {
 			continue
 		}
 
-		if s.Robots[0] < maxGeodeRobots[s.TimeLeft] - 2 {
+		if s.Robots[0] < maxGeodeRobots[s.TimeLeft]-2 {
 			continue
 		}
 		maxGeodeRobots[s.TimeLeft] = utils.Max(maxGeodeRobots[s.TimeLeft], s.Robots[0])
@@ -184,9 +182,9 @@ func dfs(bp *BluePrint, T int) (ans int) {
 			}
 		}
 
-		if !builded_geode{
+		if !builded_geode {
 			ns := &State{
-				Robots: s.Robots, Resources: s.Resources, TimeLeft: s.TimeLeft-1,
+				Robots: s.Robots, Resources: s.Resources, TimeLeft: s.TimeLeft - 1,
 			}
 			for i := 0; i < ResourceCount; i++ {
 				ns.Resources[i] += ns.Robots[i]
@@ -212,7 +210,6 @@ func solve2(data DataType) (ans int) {
 	}
 	return
 }
-
 
 func part_1(data DataType) {
 	// ans := solve(data)

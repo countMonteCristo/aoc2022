@@ -6,7 +6,6 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int]
 type DataType []int
 
 func prepare(lines []string) (data DataType) {

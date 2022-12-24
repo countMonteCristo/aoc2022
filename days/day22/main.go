@@ -2,20 +2,9 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"aoc2022/utils"
 )
-
-type IntPoint = utils.Point2d[int]
-type IntPoint3d = utils.Point3d[int]
-
-var Zero = IntPoint{X: 0, Y: 0}
-var Zero3d = IntPoint3d{X: 0, Y: 0, Z: 0}
-
-var DD = []IntPoint{
-	{X: 1, Y: 0}, {X: 0, Y: 1}, {X: -1, Y: 0}, {X: 0, Y: -1},
-}
 
 var Rotations = map[byte]int{
 	'R': 1, 'L': -1,
@@ -93,7 +82,7 @@ func (b *Board) GetWrapped(p, dp IntPoint) IntPoint {
 
 func (b *Board) Connected(p, q IntPoint, size int) (y0, a IntPoint3d, connected bool) {
 	d := p.Minus(q)
-	if utils.Manhattan(d, Zero) == size {
+	if utils.Manhattan(d, IpZero) == size {
 		connected = true
 		y0 = IntPoint3d{X: (p.X + q.X) / 2, Y: (p.Y + q.Y) / 2, Z: 0}
 		a = IntPoint3d{X: utils.Sign(-d.Y), Y: utils.Sign(d.X), Z: 0}
@@ -188,8 +177,8 @@ func (b *Board) Fold(faces []*CubeFace) {
 	rotated := make(map[int]*utils.Set[int])
 
 	for i := range faces {
-		rotated[i] = utils.NewSet[int]()
-		connections[i] = utils.NewSet[int]()
+		rotated[i] = NewIntSet()
+		connections[i] = NewIntSet()
 	}
 
 	for i, f1 := range faces {
@@ -389,10 +378,7 @@ func prepare(lines []string, part1 bool) (board Board) {
 	for i := 0; i < len(path); i++ {
 		if path[i] == 'R' || path[i] == 'L' {
 			if i > start_idx {
-				n, err := strconv.Atoi(path[start_idx:i])
-				if err != nil {
-					panic(fmt.Sprintf("Cannot convert %s to int", path[start_idx:i]))
-				}
+				n := StrToInt(path[start_idx:i])
 				board.Commands = append(board.Commands, Command{Type: Go, Steps: n})
 			}
 			board.Commands = append(board.Commands, Command{Type: Turn, Rotation: Rotations[path[i]]})
@@ -400,7 +386,7 @@ func prepare(lines []string, part1 bool) (board Board) {
 		}
 	}
 	if start_idx < len(path) {
-		n, _ := strconv.Atoi(path[start_idx:])
+		n := StrToInt(path[start_idx:])
 		board.Commands = append(board.Commands, Command{Type: Go, Steps: n})
 	}
 

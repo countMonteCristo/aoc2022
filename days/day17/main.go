@@ -7,29 +7,27 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int64]
-
 type MaskType = [][]uint8
 
 type Figure struct {
 	Width, Height int64
 	Mask          MaskType
-	Rocks         *utils.Set[IntPoint]
+	Rocks         I64pSet
 }
 
 func (f *Figure) Init() {
 	f.Height, f.Width = int64(len(f.Mask)), int64(len(f.Mask[0]))
-	f.Rocks = utils.NewSet[IntPoint]()
+	f.Rocks = NewI64pSet()
 	for x := int64(0); x < f.Width; x++ {
 		for y := int64(0); y < f.Height; y++ {
 			if f.Mask[y][x] == 1 {
-				f.Rocks.Add(IntPoint{X: x, Y: -y})
+				f.Rocks.Add(I64Point{X: x, Y: -y})
 			}
 		}
 	}
 }
 
-func (f *Figure) CanMove(topLeft, d IntPoint, room *Room, fail func(IntPoint, int64) bool) bool {
+func (f *Figure) CanMove(topLeft, d I64Point, room *Room, fail func(I64Point, int64) bool) bool {
 	for r := range f.Rocks.Iter() {
 		np := topLeft.Plus(r)
 		np.Add(d)
@@ -40,14 +38,14 @@ func (f *Figure) CanMove(topLeft, d IntPoint, room *Room, fail func(IntPoint, in
 	return true
 }
 
-func (f *Figure) CanShift(topLeft, d IntPoint, room *Room) bool {
-	return f.CanMove(topLeft, d, room, func(np IntPoint, width int64) bool {
+func (f *Figure) CanShift(topLeft, d I64Point, room *Room) bool {
+	return f.CanMove(topLeft, d, room, func(np I64Point, width int64) bool {
 		return np.X < 0 || np.X >= width
 	})
 }
 
-func (f *Figure) CanFall(topLeft, d IntPoint, room *Room) bool {
-	return f.CanMove(topLeft, d, room, func(np IntPoint, width int64) bool {
+func (f *Figure) CanFall(topLeft, d I64Point, room *Room) bool {
+	return f.CanMove(topLeft, d, room, func(np I64Point, width int64) bool {
 		return np.Y < 0
 	})
 }
@@ -58,7 +56,7 @@ type CacheKey struct {
 }
 
 type Room struct {
-	Rocks    *utils.Set[IntPoint]
+	Rocks    I64pSet
 	Width    int64
 	Commands []int
 	Figures  []*Figure
@@ -66,7 +64,7 @@ type Room struct {
 	Heights  map[int64]int64
 }
 
-func (room *Room) AddFigure(f *Figure, topLeft IntPoint) {
+func (room *Room) AddFigure(f *Figure, topLeft I64Point) {
 	for r := range f.Rocks.Iter() {
 		np := topLeft.Plus(r)
 		room.Rocks.Add(np)
@@ -85,7 +83,7 @@ func (room *Room) Clear() {
 
 func prepare(lines []string) (room *Room) {
 	room = &Room{
-		Rocks: utils.NewSet[IntPoint](),
+		Rocks: NewI64pSet(),
 		Commands: utils.Transform(strings.Split(lines[0], ""), func(c string) (idx int) {
 			if c == ">" {
 				idx = 1
@@ -115,7 +113,7 @@ func solve(room *Room, N int64) (lastHeight int64) {
 
 	v_space, h_space := int64(3), int64(2)
 	cmd_idx, fig_idx := 0, 0
-	dp := []IntPoint{
+	dp := []I64Point{
 		{X: -1, Y: 0}, {X: 1, Y: 0}, {X: 0, Y: -1},
 	}
 
@@ -131,7 +129,7 @@ func solve(room *Room, N int64) (lastHeight int64) {
 			return
 		} else {
 			fig := room.Figures[fig_idx]
-			topLeft := IntPoint{X: h_space, Y: int64(lastHeight)-1+v_space + fig.Height}
+			topLeft := I64Point{X: h_space, Y: int64(lastHeight) - 1 + v_space + fig.Height}
 
 			for {
 				d := dp[room.Commands[cmd_idx]]

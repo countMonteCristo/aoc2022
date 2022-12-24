@@ -8,8 +8,6 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int]
-
 type Rope struct {
 	Body []IntPoint
 }
@@ -32,10 +30,10 @@ func (r *Rope) Len() int {
 	return len(r.Body)
 }
 
-func (r *Rope) apply(cmd *Cmd) *utils.Set[IntPoint] {
+func (r *Rope) apply(cmd *Cmd) IpSet {
 	dp := cmd.GetDirection()
 
-	visited := utils.NewSet[IntPoint]()
+	visited := NewIpSet()
 	for i := 0; i < cmd.Count; i++ {
 		r.Head().Add(dp)
 
@@ -101,9 +99,9 @@ func (cmd *Cmd) GetDirection() (d IntPoint) {
 type DataType []Cmd
 
 func prepare(lines []string) (data DataType) {
-	data = utils.Transform(lines, func(line string)Cmd{
+	data = utils.Transform(lines, func(line string) Cmd {
 		parts := strings.Split(line, " ")
-		count, _ := strconv.Atoi(parts[1])
+		count := StrToInt(parts[1])
 		return Cmd{Dir: parts[0], Count: count}
 	})
 	return
@@ -111,7 +109,7 @@ func prepare(lines []string) (data DataType) {
 
 func solve(data DataType, rope_len int) int {
 	r := NewRope(rope_len)
-	visited := utils.NewSet[IntPoint]()
+	visited := NewIpSet()
 	visited.Add(*r.Tail())
 
 	for _, cmd := range data {

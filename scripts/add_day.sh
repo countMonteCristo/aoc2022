@@ -9,6 +9,7 @@ TEMPLATE_SRC="dayXX.go"
 DAYXX="day${DAY}"
 DAY_DIR="days/${DAYXX}"
 SRC="${DAY_DIR}/main.go"
+COMMON="common.go"
 MAKEFILE="Makefile"
 INPUTS="inputs/${DAYXX}"
 INPUT_FILE="${INPUTS}/input.txt"
@@ -43,7 +44,7 @@ echo "[INFO] Successfuly add new source file ${SRC}"
 {
     echo ""
     echo "${DAYXX}: ${SRC}"
-    echo "	\${GO} build -o bin/\$@ ${SRC}"
+    echo "	\${GO} build -o bin/\$@ ${SRC} ${DAY_DIR}/${COMMON}"
 } >> ${MAKEFILE}
 {
 	echo ""
@@ -51,3 +52,6 @@ echo "[INFO] Successfuly add new source file ${SRC}"
 	echo "	./bin/${DAYXX}"
 } >> ${MAKEFILE}
 echo "[INFO] Succesfully add targets [${DAYXX}, run_${DAYXX}] to ${MAKEFILE}"
+
+cd "${DAY_DIR}"
+ln -s ../../${COMMON} ${COMMON}

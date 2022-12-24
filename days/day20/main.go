@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"aoc2022/utils"
 )
@@ -10,20 +9,17 @@ import (
 type DataType []int
 
 func prepare(lines []string) (data DataType) {
-	return utils.Transform(lines, func(line string) int {
-		x, _ := strconv.Atoi(line)
-		return x
-	})
+	return utils.Transform(lines, StrToInt)
 }
 
 func PosMod(x, m int) int {
-	return ((x%m) + m)%m
+	return ((x % m) + m) % m
 }
 
-func solve(data DataType, M, N int ) (ans int) {
+func solve(data DataType, M, N int) (ans int) {
 	indicies := make([]int, len(data))
 	zero_id := 0
-	for i := 0; i< len(data); i++ {
+	for i := 0; i < len(data); i++ {
 		indicies[i] = i
 		data[i] *= M
 		if data[i] == 0 {
@@ -31,8 +27,8 @@ func solve(data DataType, M, N int ) (ans int) {
 		}
 	}
 
-	for n:=0; n<N; n++ {
-		for i:=0; i< len(indicies); i++ {
+	for n := 0; n < N; n++ {
+		for i := 0; i < len(indicies); i++ {
 			index := indicies[i]
 			new_index := PosMod(index+data[i], len(data)-1)
 
@@ -42,16 +38,16 @@ func solve(data DataType, M, N int ) (ans int) {
 			}
 
 			begin, end := utils.MinMax(index, new_index)
-			for j:=0; j<len(indicies); j++ {
+			for j := 0; j < len(indicies); j++ {
 				if indicies[j] >= begin && indicies[j] <= end {
-					indicies[j] = PosMod(indicies[j] - d, len(data))
+					indicies[j] = PosMod(indicies[j]-d, len(data))
 				}
 			}
 			indicies[i] = new_index
 		}
 	}
 
-	for _, d := range []int{1000, 2000, 3000} {
+	for _, d := range [3]int{1000, 2000, 3000} {
 		t := (indicies[zero_id] + d) % len(data)
 		for i, x := range indicies {
 			if x == t {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -19,8 +18,8 @@ func pairFromStr(str string) *PairSeg {
 
 func segmentFromStr(str string) (i utils.Segment) {
 	rangeStr := strings.Split(str, "-")
-	i.Begin, _ = strconv.Atoi(rangeStr[0])
-	i.End, _ = strconv.Atoi(rangeStr[1])
+	i.Begin = StrToInt(rangeStr[0])
+	i.End = StrToInt(rangeStr[1])
 	return
 }
 

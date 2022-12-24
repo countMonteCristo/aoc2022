@@ -8,9 +8,7 @@ import (
 	"aoc2022/utils"
 )
 
-type IntPoint = utils.Point2d[int]
-
-var DD = []IntPoint{
+var DP = []IntPoint{
 	{X: 1, Y: 0}, {X: 0, Y: 1}, {X: -1, Y: 0}, {X: 0, Y: -1}, {X: 0, Y: 0},
 }
 var DirIdxToStr = map[int]string{
@@ -24,7 +22,7 @@ var StrToDirIdx = map[string]int{
 
 type Valley struct {
 	Blizzards     map[IntPoint][]int
-	Empty         *utils.Set[IntPoint]
+	Empty         IpSet
 	Start, Finish IntPoint
 	W, H          int
 }
@@ -48,7 +46,7 @@ func (v *Valley) Wrap(p IntPoint) IntPoint {
 func (v *Valley) Next() Valley {
 	nv := Valley{
 		Blizzards: make(map[IntPoint][]int),
-		Empty:     utils.NewSet[IntPoint](),
+		Empty:     NewIpSet(),
 		Start:     v.Start,
 		Finish:    v.Finish,
 		W:         v.W,
@@ -57,7 +55,7 @@ func (v *Valley) Next() Valley {
 
 	for p, dirs := range v.Blizzards {
 		for _, dir := range dirs {
-			np := v.Wrap(p.Plus(DD[dir]))
+			np := v.Wrap(p.Plus(DP[dir]))
 
 			_, exists := nv.Blizzards[np]
 			if !exists {
@@ -109,7 +107,7 @@ func (v *Valley) Print() {
 func prepare(lines []string) Valley {
 	valley := Valley{
 		Blizzards: make(map[IntPoint][]int),
-		Empty:     utils.NewSet[IntPoint](),
+		Empty:     NewIpSet(),
 		W:         len(lines[0]),
 		H:         len(lines),
 	}
@@ -157,15 +155,15 @@ func prepare(lines []string) Valley {
 // ---------------------------------------------------------------------------------------------------------------------
 
 func GetMinTime(valley Valley, from, to IntPoint) (Valley, int) {
-	accessable := utils.NewSet[IntPoint]()
+	accessable := NewIpSet()
 	accessable.Add(from)
 
 	for i := 1; ; i++ {
-		new_accessable := utils.NewSet[IntPoint]()
+		new_accessable := NewIpSet()
 		valley = valley.Next()
 
 		for p := range accessable.Iter() {
-			for _, d := range DD {
+			for _, d := range DP {
 				q := p.Plus(d)
 				if valley.Empty.Contains(q) {
 					new_accessable.Add(q)
