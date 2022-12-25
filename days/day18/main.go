@@ -11,23 +11,17 @@ var dp = [][]int{
 	{0, 0, 1}, {0, 0, -1}, {0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0},
 }
 
-type Cube struct {
-	X, Y, Z int
-}
+type Cube = IntPoint3d
 
-func NewCube(x, y, z int) Cube {
-	return Cube{X: x, Y: y, Z: z}
-}
-
-func (c *Cube) IsInRange(cmin, cmax int) bool {
+func IsInRange(c *Cube, cmin, cmax int) bool {
 	return cmin <= c.X && c.X <= cmax && cmin <= c.Y && c.Y <= cmax && cmin <= c.Z && c.Z <= cmax
 }
 
-func (c *Cube) GetNbrs(cmin, cmax int) *utils.Set[Cube] {
+func GetNbrs(c *Cube, cmin, cmax int) *utils.Set[Cube] {
 	nbrs := utils.NewSet[Cube]()
 	for _, q := range dp {
-		n := NewCube(c.X+q[0], c.Y+q[1], c.Z+q[2])
-		if n.IsInRange(cmin, cmax) {
+		n := Cube{X: c.X+q[0], Y: c.Y+q[1], Z: c.Z+q[2]}
+		if IsInRange(&n, cmin, cmax) {
 			nbrs.Add(n)
 		}
 	}
@@ -49,7 +43,7 @@ func solve(cubes Cubes) (ans int) {
 		c1 := cubes[i]
 		for j := i + 1; j < len(cubes); j++ {
 			c2 := cubes[j]
-			if utils.Abs(c1.X-c2.X)+utils.Abs(c1.Y-c2.Y)+utils.Abs(c1.Z-c2.Z) == 1 {
+			if utils.Manhattan3d(c1, c2) == 1 {
 				ans -= 2
 			}
 		}
@@ -76,7 +70,7 @@ func solve2(cubes Cubes) (ans int) {
 
 	for edge.Len() > 0 {
 		e := edge.Pop()
-		nbrs := e.GetNbrs(cmin, cmax)
+		nbrs := GetNbrs(&e, cmin, cmax)
 		for n := range nbrs.Iter() {
 			if out.Contains(n) {
 				continue

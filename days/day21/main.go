@@ -50,34 +50,31 @@ func (m *Monkey) Resolve(monkeys Monkeys, val int64) {
 		))
 	}
 
+	m_unknown, arg := m2, m1.Number
+	if m2.Known {
+		m_unknown, arg = m1, m2.Number
+	}
+	var new_val int64
+
 	switch m.Operation {
 	case "+":
-		if m1.Known {
-			m2.Resolve(monkeys, val-m1.Number)
-		} else {
-			m1.Resolve(monkeys, val-m2.Number)
-		}
-	case "-":
-		if m1.Known {
-			m2.Resolve(monkeys, m1.Number-val)
-		} else {
-			m1.Resolve(monkeys, m2.Number+val)
-		}
+		new_val = val - arg
 	case "*":
+		new_val = val / arg
+	case "-":
+		new_val = arg + val
 		if m1.Known {
-			m2.Resolve(monkeys, val/m1.Number)
-		} else {
-			m1.Resolve(monkeys, val/m2.Number)
+			new_val = arg - val
 		}
 	case "/":
+		new_val = arg * val
 		if m1.Known {
-			m2.Resolve(monkeys, m1.Number/val)
-		} else {
-			m1.Resolve(monkeys, m2.Number*val)
+			new_val = arg / val
 		}
 	default:
 		panic(fmt.Sprintf("Unknown operation for monkey %s: '%s'", m.Name, m.Operation))
 	}
+	m_unknown.Resolve(monkeys, new_val)
 }
 
 func (m *Monkey) Eval(monkeys Monkeys, skip_humn bool) {
@@ -93,27 +90,6 @@ func (m *Monkey) Eval(monkeys Monkeys, skip_humn bool) {
 		)
 		m.Known = true
 	}
-}
-
-func (m *Monkey) FindPath(to *Monkey, monkeys Monkeys) Path {
-	s := utils.Stack[Path]{}
-	s.Push(Path{m.Name})
-	for !s.Empty() {
-		path := s.Pop()
-		last := monkeys[path[len(path)-1]]
-		if last.Name == to.Name {
-			return path
-		}
-		if !last.Known {
-			for _, next := range last.Args {
-				np := make(Path, 0, len(path)+1)
-				np = append(np, path...)
-				np = append(np, next)
-				s.Push(np)
-			}
-		}
-	}
-	panic(fmt.Sprintf("Can't find path from %s to %s", m.Name, to.Name))
 }
 
 func prepare(lines []string) (mokeys Monkeys) {
@@ -144,14 +120,14 @@ func solve_1(monkeys Monkeys) int64 {
 func solve_2(monkeys Monkeys) int64 {
 	humn, root := monkeys["humn"], monkeys["root"]
 	humn.Known = false
-	root_to_humn := root.FindPath(humn, monkeys)
-	known_name := root.Args[0]
-	if known_name == root_to_humn[1] {
-		known_name = root.Args[1]
+	first, second := monkeys[root.Args[0]], monkeys[root.Args[1]]
+	first.Eval(monkeys, true)
+	second.Eval(monkeys, true)
+	if first.Known {
+		second.Resolve(monkeys, first.Number)
+	} else {
+		first.Resolve(monkeys, second.Number)
 	}
-	known := monkeys[known_name]
-	known.Eval(monkeys, true)
-	monkeys[root_to_humn[1]].Resolve(monkeys, known.Number)
 	return humn.Number
 }
 

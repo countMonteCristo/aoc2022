@@ -170,3 +170,8 @@ func (p *Point3d[T]) Minus(q Point3d[T]) Point3d[T] {
 		X: p.X - q.X, Y: p.Y - q.Y, Z: p.Z - q.Z,
 	}
 }
+
+// |p| = |p.x - q.x| + |p.y - q.y| + |p.z - q.z|
+func Manhattan3d[T Number](p, q Point3d[T]) T {
+	return Abs(p.X-q.X) + Abs(p.Y-q.Y) + Abs(p.Z-q.Z)
+}

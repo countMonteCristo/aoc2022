@@ -101,7 +101,15 @@ func TestManhattan(t *testing.T) {
 		X: 4, Y: 6,
 	}
 
+	p3 := utils.Point3d[int]{
+		X:1, Y: -2, Z: 3,
+	}
+	p4 := utils.Point3d[int]{
+		X:-3, Y: 1, Z: 2,
+	}
+
 	assert.Equal(t, 8, utils.Manhattan(p1, p2))
+	assert.Equal(t, 8, utils.Manhattan3d(p3, p4))
 }
 
 func TestPoint3d(t *testing.T) {
