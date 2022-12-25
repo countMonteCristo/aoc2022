@@ -77,3 +77,18 @@ func TestUpdateMap(t *testing.T) {
 	assert.True(t, exists)
 	assert.Equal(t, xd, 5)
 }
+
+func TestFind(t *testing.T) {
+	data := []int{1, 2, 3, 4, 5, 6, 7}
+
+	index_of_4, err := utils.FindIndex(data, 4)
+	assert.Nil(t, err)
+	assert.Equal(t, 3, index_of_4)
+
+	index_of_2, err := utils.FindIndexIf(data, func(x int)bool{return x*x == 4})
+	assert.Nil(t, err)
+	assert.Equal(t, 1, index_of_2)
+
+	_, err = utils.FindIndex(data, -1)
+	assert.NotNil(t, err)
+}

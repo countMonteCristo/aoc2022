@@ -39,6 +39,12 @@ func TestMax(t *testing.T) {
 	assert.Panics(t, func() { utils.Max[int]() })
 }
 
+func TestMinMax(t *testing.T) {
+	min, max := utils.MinMax(7, 3)
+	assert.Equal(t, min, 3)
+	assert.Equal(t, max, 7)
+}
+
 func TestSegs(t *testing.T) {
 	s1 := utils.Segment{Begin: 0, End: 10}
 	s2 := utils.Segment{Begin: 1, End: 9}
@@ -96,4 +102,20 @@ func TestManhattan(t *testing.T) {
 	}
 
 	assert.Equal(t, 8, utils.Manhattan(p1, p2))
+}
+
+func TestPoint3d(t *testing.T) {
+	p2d := utils.Point2d[int]{X:5, Y: -3}
+
+	p := utils.Point3dFrom2d(p2d)
+	assert.Equal(t, p2d.X, p.X)
+	assert.Equal(t, p2d.Y, p.Y)
+	assert.Equal(t, 0, p.Z)
+
+	q := utils.Point3d[int]{X:1, Y:2, Z:4}
+	sum := p.Plus(q)
+	dif := p.Minus(q)
+
+	assert.Equal(t, utils.Point3d[int]{X:6, Y:-1, Z:4}, sum)
+	assert.Equal(t, utils.Point3d[int]{X:4, Y:-5, Z:-4}, dif)
 }

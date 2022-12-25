@@ -15,10 +15,15 @@ func TestStack(t *testing.T) {
 	assert.Panics(t, func() {stack.Top()})
 	assert.Panics(t, func() {stack.PopN(3)})
 
+	assert.True(t, stack.Empty())
+
 	stack.Push(5)
 	assert.Equal(t, 5, stack.Top())
 	stack.Push(6)
 	assert.Equal(t, 6, stack.Top())
+
+	assert.Equal(t, 2, stack.Size())
+	assert.False(t, stack.Empty())
 
 	x := stack.Pop()
 	assert.Equal(t, 6, x)

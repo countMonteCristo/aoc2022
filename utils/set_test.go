@@ -17,6 +17,9 @@ func TestSet(t *testing.T) {
 	s.Add(5)
 	assert.Panics(t, func(){ s.Remove(1)})
 
+	c := s.Copy()
+	assert.EqualValues(t, s.Iter(), c.Iter())
+
 	assert.True(t, s.Contains(5))
 	assert.True(t, !s.Empty())
 	assert.Equal(t, 1, s.Len())

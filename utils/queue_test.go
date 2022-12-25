@@ -31,6 +31,8 @@ func TestPriorityQueue(t *testing.T) {
 		})
 	}
 
+	assert.Equal(t, 3, pq.Len())
+
 	item := pq.Pop()
 	assert.Equal(t, "apple", item.name)
 	assert.Equal(t, 2, item.priority)
