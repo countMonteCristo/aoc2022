@@ -10,7 +10,7 @@ import (
 )
 
 type Surface struct {
-	Beacons    *utils.Set[I64Point]
+	Beacons    I64pSet
 	SensorDist map[I64Point]int64
 }
 

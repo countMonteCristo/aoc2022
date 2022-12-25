@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -65,9 +64,8 @@ func (rope *Rope) print(topLeft, size IntPoint) {
 				if p == q {
 					j = "H"
 					if k > 0 {
-						j = strconv.Itoa(k)
+						j = fmt.Sprint(k)
 					}
-
 					break
 				}
 			}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"unicode"
 
@@ -19,17 +18,14 @@ func priority(char rune) (pr int) {
 }
 
 func common(rucks []string) rune {
-	if len(rucks) == 0 {
-		log.Fatal("Empty rucksacks array!")
-	}
 	for _, c := range rucks[0] {
-		count := 0
 		char := string(c)
-		for n := 1; n < len(rucks); n++ {
-			if strings.Contains(rucks[n], char) {
-				count += 1
+		count := utils.SumValue(rucks, func (r string)int{
+			if r != rucks[0] && strings.Contains(r, char){
+				return 1
 			}
-		}
+			return 0
+		})
 		if count == len(rucks)-1 {
 			return c
 		}
@@ -38,7 +34,7 @@ func common(rucks []string) rune {
 }
 
 func process_1(lines []string) int {
-	return utils.SumValue(lines, func(line string)int{
+	return utils.SumValue(lines, func(line string) int {
 		return priority(common([]string{
 			line[:len(line)/2],
 			line[len(line)/2:],
@@ -47,9 +43,6 @@ func process_1(lines []string) int {
 }
 
 func process_2(lines []string, ngroups int) (total int) {
-	if len(lines)%ngroups != 0 {
-		log.Fatal("Total number of rucksacks (", len(lines), ") is not divisible by number of groups (", ngroups, ")")
-	}
 	group := make([]string, ngroups)
 	for index, line := range lines {
 		n := index % ngroups

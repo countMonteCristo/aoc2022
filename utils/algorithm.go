@@ -78,7 +78,7 @@ func FindIndexIf[T any](items []T, pred func(T) bool) (int, error) {
 			return index, nil
 		}
 	}
-	return -1, errors.New("No such element")
+	return -1, errors.New("no such element")
 }
 
 func FindIndex[T comparable](items []T, item T) (int, error) {

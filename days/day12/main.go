@@ -73,7 +73,7 @@ func (p Path) LessThan(j utils.PQItem) bool {
 }
 
 // A* has been stolen from https://ru.wikipedia.org/wiki/A*
-func astar(field *Field, S, E IntPoint) int {
+func astar(field *Field, S, E IntPoint) []IntPoint {
 	visited := NewIpSet()
 
 	queue := utils.NewPq[Path]()
@@ -90,38 +90,52 @@ func astar(field *Field, S, E IntPoint) int {
 		}
 
 		if last == E {
-			return len(item.points) - 1
+			return item.points
 		}
 		visited.Add(last)
 
 		for _, np := range nbrs(last, field) {
-			temp_path := make([]IntPoint, len(item.points), len(item.points)+1)
-			copy(temp_path, item.points)
-			new_item := &Path{
+			temp_path := make([]IntPoint, 0, len(item.points)+1)
+			temp_path = append(temp_path, item.points...)
+			queue.Push(&Path{
 				points:    append(temp_path, np),
 				heuristic: utils.Manhattan(np, E),
-			}
-			queue.Push(new_item)
+			})
 		}
 	}
-	return -100
+	return nil
 }
 
 func solve_1(field *Field) (ans int) {
-	ans = astar(field, field.s, field.e)
+	ans = len(astar(field, field.s, field.e)) - 1
 	return
 }
 
 func solve_2(field *Field) (ans int) {
 	ans = 99999
+	cache := make(map[IntPoint]int)
+
 	for i, line := range field.data {
 		for j, c := range line {
 			if c == 'S' || c == 'a' {
-				x := astar(field, IntPoint{X: j, Y: i}, field.e)
-				if x < 0 {
-					continue
+				start := IntPoint{X: j, Y: i}
+				length, exists := cache[start]
+				if !exists {
+					path := astar(field, IntPoint{X: j, Y: i}, field.e)
+					if path == nil {
+						continue
+					}
+					for i, p := range path {
+						if field.data[p.Y][p.X] == 'S' || field.data[p.Y][p.X] == 'a' {
+							p_len := len(path) - 1 - i
+							cache[p] = p_len
+							ans = utils.Min(p_len, ans)
+						}
+					}
+				} else {
+					ans = utils.Min(length, ans)
 				}
-				ans = utils.Min(x, ans)
+
 			}
 		}
 	}

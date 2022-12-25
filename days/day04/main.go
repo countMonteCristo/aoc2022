@@ -18,8 +18,7 @@ func pairFromStr(str string) *PairSeg {
 
 func segmentFromStr(str string) (i utils.Segment) {
 	rangeStr := strings.Split(str, "-")
-	i.Begin = StrToInt(rangeStr[0])
-	i.End = StrToInt(rangeStr[1])
+	i.Begin, i.End = StrToInt(rangeStr[0]), StrToInt(rangeStr[1])
 	return
 }
 

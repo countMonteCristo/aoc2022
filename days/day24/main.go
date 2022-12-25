@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"aoc2022/utils"
@@ -89,7 +88,7 @@ func (v *Valley) Print() {
 			blizzards, exists := v.Blizzards[p]
 			if exists {
 				if len(blizzards) > 1 {
-					c = strconv.Itoa(len(blizzards))
+					c = fmt.Sprint(len(blizzards))
 				} else {
 					c = DirIdxToStr[blizzards[0]]
 				}

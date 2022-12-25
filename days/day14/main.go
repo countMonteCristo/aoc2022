@@ -29,10 +29,6 @@ func NewCave() *Cave {
 	}
 }
 
-func (c *Cave) ClearSand() {
-	c.Sand.Clear()
-}
-
 func (c *Cave) AddRocks(p1, p2 IntPoint) {
 	delta := p2.Minus(p1)
 	dp := IntPoint{X: utils.Sign(delta.X), Y: utils.Sign(delta.Y)}

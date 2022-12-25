@@ -21,7 +21,7 @@ func NewFS() *FS {
 }
 
 func (fs *FS) GetSize() int {
-	return fs.Root.GetSize()
+	return fs.Root.Size
 }
 
 const (
@@ -56,24 +56,12 @@ func NewFsItem(name string, typ, size int, parent *FsItem) *FsItem {
 	}
 }
 
-func (i *FsItem) GetName() string {
-	return i.Name
-}
-
-func (i *FsItem) GetSize() int {
-	return i.Size
-}
-
-func (i *FsItem) GetType() int {
-	return i.Type
-}
-
 func (i *FsItem) GetTypeStr() string {
-	return TypeToStr(i.GetType())
+	return TypeToStr(i.Type)
 }
 
 func (i *FsItem) Repr(indent string) {
-	fmt.Printf("%s- %s (%s, size=%d)\n", indent, i.GetName(), i.GetTypeStr(), i.GetSize())
+	fmt.Printf("%s- %s (%s, size=%d)\n", indent, i.Name, i.GetTypeStr(), i.Size)
 }
 
 func (i *FsItem) Print(indent string) {
@@ -85,7 +73,7 @@ func (i *FsItem) Print(indent string) {
 
 func (i *FsItem) UpdateSize(size int) {
 	i.Size += size
-	if i.Parent != nil && i.Parent.GetType() == TypeDir {
+	if i.Parent != nil && i.Parent.Type == TypeDir {
 		i.Parent.UpdateSize(size)
 	}
 }
@@ -101,44 +89,36 @@ func Tree(i *FsItem) {
 func PrepareFS(lines []string) *FS {
 	fs := NewFS()
 	current := fs.Root
-	for i, line := range lines {
+	for _, line := range lines {
 		switch parts := strings.Split(line, " "); parts[0] {
 		case "$":
 			if parts[1] == "cd" {
 				dirName := parts[2]
 				if dirName == ".." {
 					current = current.Parent
-				} else if dirName != fs.Root.GetName() {
-					next, exists := current.Children[dirName]
-					if !exists {
-						log.Fatal("[ERROR] Line ", i+1, ": No such dir: ", dirName)
-					}
-					current = next
+				} else if dirName != fs.Root.Name {
+					current = current.Children[dirName]
 				}
-
-			} else { // `ls`, do nothing
-				{
-				}
-			}
+			}	// if `ls` - do nothing
 		case TypeToStr(TypeDir):
 			dir := NewFsItem(parts[1], TypeDir, 0, current)
-			current.Children[dir.GetName()] = dir
+			current.Children[dir.Name] = dir
 		default:
 			size := StrToInt(parts[0])
 			file := NewFsItem(parts[1], TypeFile, size, current)
-			current.Children[file.GetName()] = file
-			current.UpdateSize(file.GetSize())
+			current.Children[file.Name] = file
+			current.UpdateSize(file.Size)
 		}
 	}
 	return fs
 }
 
 func sumDirSizesBelow(i *FsItem, maxSize int) (ans int) {
-	if i.GetSize() <= maxSize {
-		ans += i.GetSize()
+	if i.Size <= maxSize {
+		ans += i.Size
 	}
 	for _, child := range i.Children {
-		if child.GetType() == TypeDir {
+		if child.Type == TypeDir {
 			ans += sumDirSizesBelow(child, maxSize)
 		}
 	}
@@ -146,13 +126,13 @@ func sumDirSizesBelow(i *FsItem, maxSize int) (ans int) {
 }
 
 func getClosestAbove(i *FsItem, minSize, currentSize int) int {
-	if i.GetSize() < minSize || i.GetSize() > currentSize {
+	if i.Size < minSize || i.Size > currentSize {
 		return currentSize
 	}
-	curMin := i.GetSize()
+	curMin := i.Size
 	for _, d := range i.Children {
-		if d.GetType() == TypeDir {
-			curMin = utils.Min(curMin, getClosestAbove(d, minSize, i.GetSize()))
+		if d.Type == TypeDir {
+			curMin = utils.Min(curMin, getClosestAbove(d, minSize, i.Size))
 		}
 	}
 	return curMin

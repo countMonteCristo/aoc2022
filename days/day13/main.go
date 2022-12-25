@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"sort"
-	"strconv"
 
 	"aoc2022/utils"
 )
@@ -29,7 +27,7 @@ func (i *Item) String() (s string) {
 	case TypeClosed:
 		s += "]"
 	case TypeValue:
-		s += strconv.Itoa(i.Value)
+		s += fmt.Sprint(i.Value)
 	}
 	return
 }
@@ -48,6 +46,18 @@ func (p Packet) String() (s string) {
 		}
 	}
 	return s[:len(s)-1]
+}
+
+func (p *Packet) Equal(q *Packet) bool {
+	if len(*p) != len(*q) {
+		return false
+	}
+	for i := 0; i < len(*p); i++ {
+		if (*p)[i] != (*q)[i] {
+			return false
+		}
+	}
+	return true
 }
 
 func parsePacket(line string) Packet {
@@ -175,7 +185,7 @@ func solve_2(groups PacketPairs) (ans int) {
 
 	ans = 1
 	for i, p := range packets {
-		if reflect.DeepEqual(p, p1) || reflect.DeepEqual(p, p2) {
+		if p.Equal(&p1) || p.Equal(&p2) {
 			ans *= (i + 1)
 		}
 	}
