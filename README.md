@@ -1,5 +1,5 @@
 # aoc2022
-[Advent of Code 2022](https://adventofcode.com/2022) solved (probably) in Golang
+[Advent of Code 2022](https://adventofcode.com/2022) solved in Golang
 
 ## Requirements
 * go >= 1.19
